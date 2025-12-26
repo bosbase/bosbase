@@ -1,4 +1,4 @@
-[BosBase](https://github.com/bosbase/bosbase-enterprise) is an open source Go backend(Base on pocketbase):
+[BosBase](https://github.com/bosbase/bosbase) is an open source Go backend(Base on pocketbase):
 AI-driven development: Use AI to work with Bosbase and bring your creative ideas to life.
 Bosbase is a development platform for AI-driven automated operations.
 Start your project with a database, Authentication, instant APIs, Realtime subscriptions, Storage, and Vector.
@@ -32,22 +32,16 @@ The application node will be reachable on `http://localhost:8090`, while Postgre
 
 ## API SDK clients
 
-The easiest way to interact with the BosBase Web APIs is to use one of the official SDK clients:
-
-- **JavaScript - [pocketbase/js-sdk](https://github.com/pocketbase/js-sdk)** (_Browser, Node.js, React Native_)
-- **Dart - [pocketbase/dart-sdk](https://github.com/pocketbase/dart-sdk)** (_Web, Mobile, Desktop, CLI_)
-
-You could also check the recommendations in https://pocketbase.io/docs/how-to-use/.
-
+The easiest way to interact with the BosBase Web APIs is to use one of the official SDK
 
 ## Overview
 
 ### Use as standalone app
 
-You could download the prebuilt executable for your platform from the [Releases page](https://github.com/bosbase/bosbase-enterprise/releases).
+You could download the prebuilt executable for your platform from the [Releases page](https://github.com/bosbase/bosbase/releases).
 Once downloaded, extract the archive and run `./pocketbase serve` in the extracted directory.
 
-The prebuilt executables are based on the [`examples/base/main.go` file](https://github.com/bosbase/bosbase-enterprise/blob/master/examples/base/main.go) and comes with the JS VM plugin enabled by default which allows to extend BosBase with JavaScript (_for more details please refer to [Extend with JavaScript](https://pocketbase.io/docs/js-overview/)_).
+The prebuilt executables are based on the [`examples/base/main.go` file](https://github.com/bosbase/bosbase/blob/master/examples/base/main.go) and comes with the JS VM plugin enabled by default which allows to extend BosBase with JavaScript (_for more details please refer to [Extend with JavaScript](https://pocketbase.io/docs/js-overview/)_).
 
 ### Use as a Go framework/toolkit
 
@@ -137,28 +131,17 @@ Check also the [Testing guide](http://pocketbase.io/docs/testing) to learn how t
 
 ## Security
 
-If you discover a security vulnerability within BosBase, please send an e-mail to **support at pocketbase.io**.
+If you discover a security vulnerability within BosBase, please send an e-mail  support@bosbase.com
 
 All reports will be promptly addressed and you'll be credited in the fix release notes.
 
 ## Contributing
 
 BosBase is free and open source project licensed under the [MIT License](LICENSE.md).
-You are free to do whatever you want with it, even offering it as a paid service.
+You are free to do whatever you want with it
 
-You could help continuing its development by:
 
-- [Contribute to the source code](CONTRIBUTING.md)
-- [Suggest new features and report issues](https://github.com/bosbase/bosbase-enterprise/issues)
-
-PRs for new OAuth2 providers, bug fixes, code optimizations and documentation improvements are more than welcome.
-
-But please refrain creating PRs for _new features_ without previously discussing the implementation details.
-BosBase has a [roadmap](https://github.com/orgs/pocketbase/projects/2) and I try to work on issues in specific order and such PRs often come in out of nowhere and skew all initial planning with tedious back-and-forth communication.
-
-Don't get upset if I close your PR, even if it is well executed and tested. This doesn't mean that it will never be merged.
-Later we can always refer to it and/or take pieces of your implementation when the time comes to work on the issue (don't worry you'll be credited in the release notes).
-
+ 
 base on BosBase v0.30.0
 build linux product
 
