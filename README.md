@@ -1,7 +1,7 @@
 [BosBase](https://github.com/bosbase/bosbase) is an open source Go backend(Base on pocketbase):
 AI-driven development: Use AI to work with Bosbase and bring your creative ideas to life.
 Bosbase is a development platform for AI-driven automated operations.
-Start your project with a database, Authentication, instant APIs, Realtime subscriptions, Storage, and Vector.
+Start your project with a database, Authentication, instant APIs, Realtime subscriptions, Storage, and Vector and Wasm
 
 ## Multi-node deployments with PostgreSQL
 
@@ -25,7 +25,8 @@ BosBase can delegate all database operations to an external [PostgreSQL](https:/
 An example compose file is available at [`docker/docker-compose.postgres.yml`](docker/docker-compose.postgres.yml). It launches a PostgreSQL instance and a BosBase container that points at it. To try it out:
 
 ```sh
-docker compose -f docker/docker-compose.postgres.yml up --build
+docker compose -f docker/docker-compose.db.yml up --build
+docker compose -f docker/docker-compose.yml up --build
 ```
 
 The application node will be reachable on `http://localhost:8090`, while PostgreSQL listens on `localhost:5432` (default credentials: `postgres` / `postgres`). Update the compose file to match your production settings.
