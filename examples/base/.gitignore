@@ -1,0 +1,8 @@
+# ignore everything
+node/node_modules
+pb_data/
+*.db
+base.exe
+# exclude from the ignore filter
+!.gitignore
+!main.go

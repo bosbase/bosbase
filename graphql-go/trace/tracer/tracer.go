@@ -1,0 +1,37 @@
+// The tracer package provides tracing functionality.
+package tracer
+
+import (
+	"context"
+
+	"graphql-go/errors"
+	"graphql-go/introspection"
+)
+
+type (
+	QueryFinishFunc      = func([]*errors.QueryError)
+	FieldFinishFunc      = func(*errors.QueryError)
+	ValidationFinishFunc = func([]*errors.QueryError)
+)
+
+type Tracer interface {
+	TraceQuery(ctx context.Context, queryString string, operationName string, variables map[string]interface{}, varTypes map[string]*introspection.Type) (context.Context, QueryFinishFunc)
+	TraceField(ctx context.Context, label, typeName, fieldName string, trivial bool, args map[string]interface{}) (context.Context, FieldFinishFunc)
+}
+
+type ValidationTracer interface {
+	TraceValidation(ctx context.Context) ValidationFinishFunc
+}
+
+// Deprecated: use [ValidationTracer] instead.
+type LegacyValidationTracer interface {
+	TraceValidation() func([]*errors.QueryError)
+}
+
+// Deprecated: use a Tracer which implements [ValidationTracer].
+type LegacyNoopValidationTracer struct{}
+
+// Deprecated: use a Tracer which implements [ValidationTracer].
+func (LegacyNoopValidationTracer) TraceValidation() func([]*errors.QueryError) {
+	return func(errs []*errors.QueryError) {}
+}

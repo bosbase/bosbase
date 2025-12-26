@@ -1,0 +1,116 @@
+# Version control
+.git
+.gitignore
+.gitattributes
+.github/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Documentation files (not needed in production image)
+README*.md
+CHANGELOG*.md
+LICENSE*.md
+CONTRIBUTING.md
+SDK_API_REVIEW.md
+TEST_VECTORS.md
+*.html
+
+# Test files and test data (source code leak risk)
+*_test.go
+tests/
+coverage.out
+*.test
+
+# Build artifacts and binaries
+/bosbase
+base.exe
+.builds/
+*.exe
+*.out
+*.bin
+
+# Development and configuration files
+.env
+.env.*
+*.env
+golangci.yml
+Makefile
+*.todo
+tmpdebug/
+
+# UI build artifacts and dependencies
+ui/dist/
+ui/node_modules/
+ui/.env*
+ui/.env.*
+ui/build/
+
+# Example/test data and databases
+examples/base/node/node_modules
+examples/base/node/local.db
+examples/base/pb_data
+examples/base/base.exe
+examples/base/Dockerfile
+examples/base/docker-compose.yml
+
+# Docker data directories (to avoid permission issues during build)
+docker/postgres-data/
+docker/_postgres-data/
+docker/bosbase-data/
+docker/bosbase-data-2/
+**/postgres-data/
+**/_postgres-data/
+**/bosbase-data/
+**/bosbase-data-2/
+
+# CI/CD configuration (may contain sensitive info)
+.gitlab-ci.yml
+.travis.yml
+Jenkinsfile
+.circleci/
+
+# SDK directory (if generated or contains examples)
+sdk/
+
+# Temporary and cache files
+*.log
+*.tmp
+*.cache
+.cache/
+
+# Python virtual environments (if any)
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# Node.js (keep only what's needed)
+node_modules/
+package-lock.json
+yarn.lock
+npm-debug.log*
+
+# Miscellaneous
+*.db
+*.db-shm
+*.db-wal
+
+active-tool/
+examples/base/__debug_bin*
+test-case/
+pythonplugin/
+docker/pythonplugin/data
+test-case
+js-sdk/
+dart-sdk/
+
+
+#rust temp
+target/
+**/target/

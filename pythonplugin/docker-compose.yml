@@ -1,0 +1,13 @@
+version: '3.9'
+services:
+  bosbase-python-plugin:
+    build: .
+    image: bosbase-python-plugin:vb1
+    ports:
+      - "5677:5677"
+    environment:
+      - WEB_CONCURRENCY=4
+      # - UVICORN_WORKERS=6
+    restart: unless-stopped
+    volumes:
+      - ./data:/data

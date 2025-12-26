@@ -1,0 +1,20 @@
+version: "3.9"
+
+services:
+
+  node-sync:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: pocketbase-sync:prod
+    working_dir: /app/node
+    command: ["npm", "run", "sync"]
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ../pb_data:/app/pb_data
+    restart: unless-stopped
+
+volumes:
+  pb_data:
+    driver: local

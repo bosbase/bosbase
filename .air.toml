@@ -1,0 +1,39 @@
+# Config for Air - https://github.com/air-verse/air
+root = "."
+tmp_dir = "/tmp/air-bosbase"
+
+[build]
+  cmd = "CGO_ENABLED=1 go build -o /tmp/air-bosbase/bosbasepro-dev ./examples/base"
+  bin = "/tmp/air-bosbase/bosbasepro-dev"
+  args_bin = ["serve", "--http=0.0.0.0:8090", "--encryptionEnv", "BS_ENCRYPTION_KEY"]
+  # Customize binary, can setup environment variables when run your app.
+  full_bin = "WASM_ENABLE=true SASSPB_POSTGRES_URL=postgres://postgres:postgres@192.168.37.129:5432/pbosbase?sslmode=disable BS_ENCRYPTION_KEY=0123456789abcdef0123456789abcdef OPENAI_API_KEY=sk-af61vU1kIT0uw5YzOM7VRM3KGrxBAfuhVgJX9ghtkHfdRVsu OPENAI_BASE_URL=https://api.chatanywhere.org/v1 /tmp/air-bosbase/bosbasepro-dev"
+  include_dir = ["."]
+  exclude_dir = ["pb_data", "tmp", "tmpdebug", "node_modules", "ui/node_modules", ".git", ".vscode","docker","test-case","sdk"]
+  include_ext = ["go", "tpl", "tmpl", "html", "js", "ts", "json", "yaml", "yml", "sql", "toml"]
+  exclude_regex = ["_test\\.go"]
+  delay = 1000
+  send_interrupt = true
+  kill_delay = 500
+  stop_on_error = true
+  log = "air-build.log"
+
+[env]
+  SASSPB_BOSBASEDB_URL = "http://192.168.37.129:4001"
+  BS_ENCRYPTION_KEY = "0123456789abcdef0123456789abcdef"
+  OPENAI_API_KEY = "sk-af61vU1kIT0uw5YzOM7VRM3KGrxBAfuhVgJX9ghtkHfdRVsu"
+  OPENAI_BASE_URL = "https://api.chatanywhere.org/v1"
+  PB_ACTIVATION_VERIFY_URL = "http://192.168.37.129:5678/verify"
+  PB_ACTIVATION_PUBLIC_KEY = ""
+
+[log]
+  time = true
+
+[color]
+  main = "cyan"
+  watcher = "yellow"
+  build = "magenta"
+  runner = "green"
+
+[misc]
+  clean_on_exit = true

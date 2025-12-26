@@ -1,0 +1,13 @@
+[project]
+name = "functions"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi[standard]>=0.124.4",
+    "gunicorn>=23.0.0",
+    "httpx>=0.28.1",
+    "requests>=2.32.5",
+    "watchdog>=6.0.0",
+]

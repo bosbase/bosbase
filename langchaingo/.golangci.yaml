@@ -1,0 +1,44 @@
+version: "2"
+linters:
+  default: none
+  enable:
+    - errcheck
+    - govet
+    - ineffassign
+    - staticcheck
+    - unused
+    - forbidigo
+    - funlen
+    - gosec
+    - misspell
+  settings:
+    cyclop:
+      max-complexity: 12
+    forbidigo:
+      forbid:
+        - pattern: import "[^"]+/(util|common|helpers)"
+    funlen:
+      lines: 90
+    gosec:
+      excludes:
+        - G115
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
+    paths:
+      - internal
+      - vectorstores/bedrockknowledgebases
+formatters:
+  enable:
+    - gofmt
+    - goimports
+  exclusions:
+    generated: lax
+    paths:
+      - third_party$
+      - builtin$
+      - examples$

@@ -1,0 +1,104 @@
+:root {
+    --baseFontFamily: 'Source Sans Pro', sans-serif, emoji;
+    --monospaceFontFamily: 'Ubuntu Mono', monospace, emoji;
+    --iconFontFamily: 'remixicon';
+
+    --txtPrimaryColor: #1d1d1f;
+    --txtHintColor: #86868b;
+    --txtDisabledColor: #c7c7cc;
+
+    --primaryColor: #007aff;
+
+    --bodyColor: #fafafa;
+
+    --baseColor: #ffffff;
+    --baseAlt1Color: #f5f5f7;
+    --baseAlt2Color: #e5e5e7;
+    --baseAlt3Color: #d2d2d7;
+    --baseAlt4Color: #a1a1a6;
+
+    --infoColor: #007aff;
+    --infoAltColor: #e3f2fd;
+    --successColor: #34c759;
+    --successAltColor: #d4f4dd;
+    --dangerColor: #ff3b30;
+    --dangerAltColor: #ffe5e3;
+    --warningColor: #ff9500;
+    --warningAltColor: #ffe5cc;
+
+    --overlayColor: rgba(0, 0, 0, 0.4);
+    --tooltipColor: rgba(0, 0, 0, 0.85);
+    --shadowColor: rgba(0, 0, 0, 0.05);
+
+    --baseFontSize: 14.5px;
+    --xsFontSize: 12px;
+    --smFontSize: 13px;
+    --lgFontSize: 15px;
+    --xlFontSize: 16px;
+
+    --baseLineHeight: 22px;
+    --smLineHeight: 16px;
+    --lgLineHeight: 24px;
+
+    --inputHeight: 34px;
+
+    --btnHeight: 40px;
+    --xsBtnHeight: 22px;
+    --smBtnHeight: 30px;
+    --lgBtnHeight: 54px;
+
+    // 基础空间间距🐱
+    --baseSpacing: 20px;
+    --xsSpacing: 15px;
+    --smSpacing: 20px;
+    --lgSpacing: 50px;
+    --xlSpacing: 60px;
+
+    --wrapperWidth: 850px;
+    --smWrapperWidth: 420px;
+    --lgWrapperWidth: 1200px;
+
+    --appSidebarWidth: 75px;
+    --pageSidebarWidth: 235px;
+
+    --baseAnimationSpeed: 150ms;
+    --activeAnimationSpeed: 70ms;
+    --entranceAnimationSpeed: 250ms;
+
+    --baseRadius: 4px;
+    --lgRadius: 12px;
+    --btnRadius: 4px;
+
+    // https://developer.mozilla.org/en-US/docs/Web/CSS/accent-color
+    accent-color: var(--primaryColor);
+}
+
+
+// Maps
+// ----
+$colorsMap: (
+    "primary": var(--primaryColor),
+    "info": var(--infoColor),
+    "info-alt": var(--infoAltColor),
+    "success": var(--successColor),
+    "success-alt": var(--successAltColor),
+    "danger": var(--dangerColor),
+    "danger-alt": var(--dangerAltColor),
+    "warning": var(--warningColor),
+    "warning-alt": var(--warningAltColor),
+);
+
+$sidesMap: (
+    "t": "top",
+    "r": "right",
+    "b": "bottom",
+    "l": "left",
+);
+
+$sizesMap: (
+    "base": var(--baseSpacing),
+    "xs": var(--xsSpacing),
+    "sm": var(--smSpacing),
+    "lg": var(--lgSpacing),
+    "xl": var(--xlSpacing),
+);
