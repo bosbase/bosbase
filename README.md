@@ -1,7 +1,8 @@
-[BosBase](https://github.com/bosbase/bosbase) is an open source Go backend(Base on pocketbase):
-AI-driven development: Use AI to work with Bosbase and bring your creative ideas to life.
-Bosbase is a development platform for AI-driven automated operations.
-Start your project with a database, Authentication, instant APIs, Realtime subscriptions, Storage, and Vector and Wasm
+[BosBase](https://github.com/bosbase/bosbase) is a completely open source alternative to Pocketbase and Supabase. It is a Go backend that provides:
+
+- **AI-driven development**: Use AI to work with Bosbase and bring your creative ideas to life
+- **Development platform**: Bosbase is a platform for AI-driven automated operations
+- **Complete backend solution**: Start your project with a database, Authentication, instant APIs, Realtime subscriptions, Storage, and Vector and Wasm
 
 ## Multi-node deployments with PostgreSQL
 
