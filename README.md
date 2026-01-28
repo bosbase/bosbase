@@ -17,3 +17,6 @@ offical docker image
 bosbase/bosbase:ve1
 ```
 
+self host 
+https://github.com/bosbase/self-host
+
