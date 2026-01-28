@@ -1,4 +1,4 @@
-package pocketbase
+package bosbase
 
 import (
 	"os"

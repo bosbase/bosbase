@@ -20,7 +20,7 @@ import (
 )
 
 func main() {
-	app := pocketbase.New()
+	app := bosbase.New()
 
 	if err := app.Start(); err != nil {
 		log.Fatal(err)

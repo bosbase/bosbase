@@ -1,4 +1,4 @@
-package pocketbase
+package bosbase
 
 import (
 	"fmt"
@@ -12,11 +12,12 @@ import (
 	"time"
 
 	"dbx"
-	"github.com/fatih/color"
+
 	"github.com/bosbase/bosbase-enterprise/cmd"
 	"github.com/bosbase/bosbase-enterprise/core"
 	"github.com/bosbase/bosbase-enterprise/tools/list"
 	"github.com/bosbase/bosbase-enterprise/tools/osutils"
+	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 
 	_ "github.com/bosbase/bosbase-enterprise/migrations"
