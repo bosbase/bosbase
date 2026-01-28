@@ -11,4 +11,9 @@ docker compose -f docker/docker-compose.db.yml up --build
 docker compose -f docker/docker-compose.yml up --build
 ```
 
+offical docker image
+
+```
+bosbase/bosbase:ve1
+```
 
