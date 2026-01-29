@@ -55,6 +55,10 @@ Includes one-click install scripts for Ubuntu/Rocky Linux, Docker Compose config
 
 Questions, feedback, or issues? Reach out at **support@bosbase.com**
 
+## Docs
+
+[Bosbase docs](https://docs.bosbase.com/docs/sdk/)
+
 ## Acknowledgments
 
 Bosbase would not exist without [PocketBase](https://pocketbase.io/) — thank you for the amazing foundation!
