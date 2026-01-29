@@ -17,6 +17,16 @@ offical docker image
 bosbase/bosbase:ve1
 ```
 
-self host 
+Self host 
 https://github.com/bosbase/self-host
 
+
+Try product
+
+```
+Open the Bosbase dashboard at https://try.bosbase.com/_/ 
+Superuser email: try@bosbase.com
+Superuser password: bosbasepass
+API endpoint: https://try.bosbase.com
+
+```
