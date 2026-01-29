@@ -30,3 +30,5 @@ Superuser password: bosbasepass
 API endpoint: https://try.bosbase.com
 
 ```
+
+support@bosbase.com
