@@ -32,3 +32,8 @@ API endpoint: https://try.bosbase.com
 ```
 
 support@bosbase.com
+
+
+The birth of Bosbase is inseparable from PocketBase—thanks to PocketBase.
+Built on the foundation of PocketBase, Bosbase adds support for PostgreSQL and enables large-scale commercial deployments, helping enterprises significantly reduce costs.
+Redesigned from first principles for the AI era's backend services, it allows implementation of any complex business logic without ever restarting the service.
