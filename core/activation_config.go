@@ -25,7 +25,7 @@ import (
 )
 
 const (
-	defaultTrialDuration          = 30 * 24 * time.Hour
+	defaultTrialDuration          = 3650 * 24 * time.Hour
 	activationPublicKeyEnvKey     = "PB_ACTIVATION_PUBLIC_KEY"
 	activationAlgEnvKey           = "PB_ACTIVATION_ALG"
 	activationVerifyURLEnvKey     = "PB_ACTIVATION_VERIFY_URL"
