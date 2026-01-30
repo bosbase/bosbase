@@ -61,10 +61,6 @@ Questions, feedback, or issues? Reach out at **support@bosbase.com**
 
 [Bosbase docs](https://docs.bosbase.com/docs/sdk/)
 
-## Acknowledgments
-
-Bosbase would not exist without [PocketBase](https://pocketbase.io/) — thank you for the amazing foundation!
-
 ## How to use
 
 1. **Copy the SDK Docs Path to Your Project**  
@@ -81,6 +77,10 @@ Bosbase would not exist without [PocketBase](https://pocketbase.io/) — thank y
    - **API endpoint (base URL):** https://try.bosbase.com  
 
    **Note on API endpoint to AI:** Bosbase supports AI-assisted development through its SDKs (see AI Development Guides in https://docs.bosbase.com/docs/sdk). The base API endpoint above handles all requests, including any AI-related features or integrations (no separate AI-specific endpoint is required; use the standard SDK methods for collections, auth, etc.). For AI-specific examples, refer to the guides in the docs (e.g., for JS SDK: https://docs.bosbase.com/docs/sdk/js-docs/ai-development-guide).
+
+## Acknowledgments
+
+Bosbase would not exist without [PocketBase](https://pocketbase.io/) — thank you for the amazing foundation!
 
 ## License
 
