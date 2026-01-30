@@ -65,7 +65,21 @@ Questions, feedback, or issues? Reach out at **support@bosbase.com**
 Bosbase would not exist without [PocketBase](https://pocketbase.io/) — thank you for the amazing foundation!
 
 ## How to use
-Use bosbase sdk. copy the sdk docs to your project [sdk](https://github.com/orgs/bosbase/repositories)
+
+1. **Copy the SDK Docs Path to Your Project**  
+   To keep documentation handy (e.g., for reference or offline use):  
+   - Clone or download the relevant SDK repository (e.g., `js-sdk` for JavaScript/TypeScript, `python-sdk` for Python, etc.) from https://github.com/orgs/bosbase/repositories.  
+   - Copy the `docs/` folder (or README.md + any markdown docs) from the SDK repo into your project's `docs/sdk/` directory (create it if needed).  
+   - Alternatively, link to the official docs: https://docs.bosbase.com/docs/sdk for the latest versions across all SDKs.
+
+2. **Configure Bosbase Connection**  
+   Use the following credentials and endpoint for testing/demo purposes (from the official Bosbase try instance). For production, deploy your own Bosbase instance and update these values.
+
+   - **Superuser email:** try@bosbase.com  
+   - **Superuser password:** bosbasepass  
+   - **API endpoint (base URL):** https://try.bosbase.com  
+
+   **Note on API endpoint to AI:** Bosbase supports AI-assisted development through its SDKs (see AI Development Guides in https://docs.bosbase.com/docs/sdk). The base API endpoint above handles all requests, including any AI-related features or integrations (no separate AI-specific endpoint is required; use the standard SDK methods for collections, auth, etc.). For AI-specific examples, refer to the guides in the docs (e.g., for JS SDK: https://docs.bosbase.com/docs/sdk/js-docs/ai-development-guide).
 
 ## License
 
