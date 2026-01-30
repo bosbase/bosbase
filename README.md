@@ -33,6 +33,7 @@ docker compose -f docker/docker-compose.yml up --build
 Official Docker image: `bosbase/bosbase:ve1`
 
 Access the admin dashboard at `http://localhost:8090/_/` (or your configured port).
+API endpoint: `http://localhost:8090` 
 
 ### Try Bosbase Online (No Installation)
 
