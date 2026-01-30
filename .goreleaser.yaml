@@ -1,6 +1,6 @@
 version: 2
 
-project_name: pocketbase
+project_name: bosbase
 
 dist: .builds
 
@@ -11,7 +11,7 @@ before:
 builds:
   - id: build_noncgo
     main: ./examples/base
-    binary: pocketbase
+    binary: bosbase
     ldflags:
       - -s -w -X github.com/bosbase/bosbase-enterprise.Version={{ .Version }}
     env:
