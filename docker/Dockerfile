@@ -172,9 +172,8 @@ COPY wasmedge /usr/local
 COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY docker/start-gunicorn.sh /pb/start-gunicorn.sh
 COPY docker/start-bosbase.sh /pb/start-bosbase.sh
-# COPY docker/start-booster.sh 
+# COPY docker/start-booster.sh  /pb/start-booster.sh
 RUN chmod +x /pb/start-gunicorn.sh /pb/start-bosbase.sh 
-#/pb/start-booster.sh
 # RUN chmod +x /pb/start-booster.sh
 
 ENV PATH="/usr/local/bin:${PATH}"
