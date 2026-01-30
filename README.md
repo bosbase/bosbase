@@ -65,7 +65,7 @@ Questions, feedback, or issues? Reach out at **support@bosbase.com**
 Bosbase would not exist without [PocketBase](https://pocketbase.io/) — thank you for the amazing foundation!
 
 ## How to use
-Use bosbase sdk. copy the sdk docs to your project
+Use bosbase sdk. copy the sdk docs to your project [sdk](https://github.com/orgs/bosbase/repositories)
 
 ## License
 
