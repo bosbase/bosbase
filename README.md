@@ -1,10 +1,12 @@
 # Bosbase
 
-**Bosbase** is a completely open-source backend platform designed as a modern alternative to PocketBase and Supabase. it delivers a full-featured backend solution while embracing the AI era with AI-driven development tools and flexible extensibility.
+**Bosbase** is a permanently open-source and free backend platform designed as a modern alternative to PocketBase and Supabase. It delivers a full-featured backend solution while embracing the AI era with AI-driven development tools and flexible extensibility.
+
+Bosbase is completely free for personal use and for large-scale enterprise deployments. It's fully community-managed with no licensing fees or hidden costs.
 
 Bosbase is built on the foundation of PocketBase — huge thanks to the PocketBase project for the inspiration! We extended and redesigned it from first principles to better support large-scale commercial deployments, PostgreSQL as the primary database (with pgvector for vector capabilities), zero-downtime hot-reload for complex business logic, WASM plugins, and AI-assisted operations.
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Docker Image](https://img.shields.io/docker/pulls/bosbase/bosbase.svg)](https://hub.docker.com/r/bosbase/bosbase)
 
 ## Features
@@ -14,7 +16,11 @@ Bosbase is built on the foundation of PocketBase — huge thanks to the PocketBa
 - **Hot-reload & zero-downtime updates** — Implement and modify complex business logic without restarting the service.
 - **PostgreSQL backend** — Scalable, production-ready with PostgreSQL support for enterprise-grade deployments and cost reduction.
 - **Extensible platform** — Designed for AI-driven automated operations and custom extensions.
-- **Open source & commercial friendly** — MIT licensed, fully open, supports self-hosting and large-scale use.
+- **Permanently open source & free** — Apache 2.0 licensed, completely free for personal use and large-scale enterprise deployments. Fully community-managed with no licensing fees.
+
+## About Bosbase
+
+Bosbase is permanently open source and free. It's completely free for personal use and for large-scale enterprise deployments. It's fully community-managed, ensuring transparency and long-term sustainability.
 
 Bosbase helps enterprises and developers reduce backend costs while enabling powerful AI-native features.
 
@@ -57,9 +63,38 @@ Includes one-click install scripts for Ubuntu/Rocky Linux, Docker Compose config
 Questions, feedback, or issues? Reach out at **support@bosbase.com**
 
 [Join discord](https://discord.gg/wJ7VxzXf)
-## Docs
+## Docs & SDKs
 
+### Official Documentation
 [Bosbase docs](https://docs.bosbase.com/docs/sdk/)
+
+### Frontend Templates & SDKs
+
+Bosbase provides ready-to-use templates and SDKs for popular frameworks:
+
+- **[bosbase/bosbase-nextjs](https://github.com/bosbase/bosbase-nextjs)** — Next.js template with Bosbase JavaScript SDK integration
+  - Includes TypeScript support
+  - Docker-ready configuration
+  - Complete SDK documentation included
+  - Google Auth setup guide
+  - Locale switcher usage examples
+
+- **[bosbase/bosbase_flutter](https://github.com/bosbase/bosbase_flutter)** — Flutter template with Bosbase Dart SDK
+  - Cross-platform mobile app (Android, iOS, Web, Windows)
+  - Complete CRUD examples (songs collection)
+  - Offline mock data fallback
+  - Flutter SDK 3.35.7 compatible
+  - Step-by-step setup guide
+  - JDK 17 configuration for Android
+
+Both templates include:
+- Pre-configured Bosbase client setup
+- Authentication helpers
+- CRUD operation examples
+- Docker deployment support
+- Complete documentation
+
+See the individual repositories for detailed setup instructions and examples.
 
 ## How to use
 
@@ -84,4 +119,16 @@ Bosbase would not exist without [PocketBase](https://pocketbase.io/) — thank y
 
 ## License
 
-MIT License — see [LICENSE](LICENSE) for details.
+Apache License 2.0 — see [LICENSE](LICENSE) for details.
+
+### Our Commitment
+
+Bosbase is permanently open source and free. It's completely free for personal use and for large-scale enterprise deployments. It's fully community-managed with:
+
+- ✅ No licensing fees
+- ✅ No enterprise tiers or paid features
+- ✅ No usage limits or restrictions
+- ✅ Full transparency and community governance
+- ✅ Freedom to self-host and modify
+
+We believe in open-source software that remains free forever, empowering developers and businesses of all sizes to build amazing products without backend licensing costs.
