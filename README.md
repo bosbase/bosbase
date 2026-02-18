@@ -110,6 +110,7 @@ See the individual repositories for detailed setup instructions and examples.
    - **Superuser email:** try@bosbase.com  
    - **Superuser password:** bosbasepass  
    - **API endpoint (base URL):** https://try.bosbase.com  
+    - **Admin URL:** https://try.bosbase.com/_/
 
    **Note on API endpoint to AI:** Bosbase supports AI-assisted development through its SDKs (see AI Development Guides in https://docs.bosbase.com/docs/sdk). The base API endpoint above handles all requests, including any AI-related features or integrations (no separate AI-specific endpoint is required; use the standard SDK methods for collections, auth, etc.). For AI-specific examples, refer to the guides in the docs (e.g., for JS SDK: https://docs.bosbase.com/docs/sdk/js-docs/ai-development-guide).
 
