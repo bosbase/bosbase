@@ -471,8 +471,13 @@ func scriptsExecuteAsyncStatus(e *core.RequestEvent) error {
 	}
 
 	resp := map[string]any{
-		"id":     job.Id,
-		"status": job.Status,
+		"id":         job.Id,
+		"scriptName": job.ScriptName,
+		"status":     job.Status,
+		"startedAt":  job.Started.Format(time.RFC3339),
+	}
+	if job.Finished != nil {
+		resp["finishedAt"] = job.Finished.Format(time.RFC3339)
 	}
 	if job.Status == "done" {
 		resp["output"] = job.Output
@@ -860,9 +865,13 @@ func scriptsCommandStatus(e *core.RequestEvent) error {
 	}
 
 	resp := map[string]any{
-		"id":      job.Id,
-		"status":  job.Status,
-		"command": job.Command,
+		"id":        job.Id,
+		"status":    job.Status,
+		"command":   job.Command,
+		"startedAt": job.Started.Format(time.RFC3339),
+	}
+	if job.Finished != nil {
+		resp["finishedAt"] = job.Finished.Format(time.RFC3339)
 	}
 	if job.Status == "done" {
 		resp["output"] = job.Output
