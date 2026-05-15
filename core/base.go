@@ -1564,7 +1564,6 @@ func (app *BaseApp) registerBaseHooks() {
 	app.registerOTPHooks()
 	app.registerAuthOriginHooks()
 	app.registerTokenBindingsHooks()
-	app.registerActivationHooks()
 }
 
 // getLoggerMinLevel returns the logger min level based on the

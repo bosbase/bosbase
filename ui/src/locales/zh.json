@@ -1013,39 +1013,5 @@
                 }
             }
         }
-    },
-    "activation": {
-        "label": {
-            "default": "激活",
-            "activeUntil": "有效期至 {date}",
-            "trialExpires": "试用到期 {date}",
-            "expiredOn": "{date} 已到期",
-            "expired": "激活已过期",
-            "required": "需要激活"
-        },
-        "toast": {
-            "verified": "激活成功。"
-        },
-        "modal": {
-            "title": "激活",
-            "activatedEmail": "已激活邮箱：{email}",
-            "email": "邮箱",
-            "code": "激活码",
-            "mode": "激活方式",
-            "modeOffline": "离线（无外部请求）",
-            "modeOnline": "在线（会访问激活服务器）",
-            "modeHelp": "如果无法访问激活服务器，请选择离线模式。",
-            "activateNow": "立即激活"
-        },
-        "reminder": {
-            "title": "许可证提醒",
-            "subscription": "订阅将于 {date} 到期",
-            "trial": "试用将于 {date} 到期",
-            "generic": "激活即将到期。",
-            "cta": "请尽快购买或续订许可证，避免服务中断。",
-            "snooze": "稍后提醒",
-            "disable": "不再提醒",
-            "activateNow": "去激活"
-        }
     }
 }

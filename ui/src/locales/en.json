@@ -594,40 +594,6 @@
             "syncSetting": "System data"
         }
     },
-    "activation": {
-        "label": {
-            "default": "Activation",
-            "activeUntil": "Active until {date}",
-            "trialExpires": "Trial expires {date}",
-            "expiredOn": "Expired {date}",
-            "expired": "Activation expired",
-            "required": "Activation required"
-        },
-        "toast": {
-            "verified": "Activation verified."
-        },
-        "modal": {
-            "title": "Activation",
-            "activatedEmail": "Activated email: {email}",
-            "email": "Email",
-            "code": "Activation code",
-            "mode": "Activation mode",
-            "modeOffline": "Offline (no external call)",
-            "modeOnline": "Online (will contact activation server)",
-            "modeHelp": "Choose offline if your network cannot reach the activation server.",
-            "activateNow": "Activate"
-        },
-        "reminder": {
-            "title": "License Reminder",
-            "subscription": "Subscription expires {date}",
-            "trial": "Trial expires {date}",
-            "generic": "Activation nearing expiration.",
-            "cta": "Please purchase or renew your license to avoid disruption.",
-            "snooze": "Remind me later",
-            "disable": "Don't remind me again",
-            "activateNow": "Activate now"
-        }
-    },
     "page": {
         "login": {
             "title": "Log in",

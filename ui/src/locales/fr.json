@@ -1013,39 +1013,5 @@
                 }
             }
         }
-    },
-    "activation": {
-        "label": {
-            "default": "Activation",
-            "activeUntil": "Actif jusqu’au {date}",
-            "trialExpires": "Essai valable jusqu’au {date}",
-            "expiredOn": "Expiré le {date}",
-            "expired": "Activation expirée",
-            "required": "Activation requise"
-        },
-        "toast": {
-            "verified": "Activation vérifiée."
-        },
-        "modal": {
-            "title": "Activation",
-            "activatedEmail": "Email activé : {email}",
-            "email": "Email",
-            "code": "Code d’activation",
-            "mode": "Mode d’activation",
-            "modeOffline": "Hors ligne (aucun appel externe)",
-            "modeOnline": "En ligne (contacte le serveur d’activation)",
-            "modeHelp": "Choisissez hors ligne si votre réseau ne peut atteindre le serveur d’activation.",
-            "activateNow": "Activer"
-        },
-        "reminder": {
-            "title": "Rappel de licence",
-            "subscription": "Abonnement valable jusqu’au {date}",
-            "trial": "Essai valable jusqu’au {date}",
-            "generic": "L’activation va bientôt expirer.",
-            "cta": "Achetez ou renouvelez votre licence pour éviter toute interruption.",
-            "snooze": "Me rappeler plus tard",
-            "disable": "Ne plus rappeler",
-            "activateNow": "Activer maintenant"
-        }
     }
 }

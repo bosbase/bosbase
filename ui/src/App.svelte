@@ -8,7 +8,6 @@
     import Toasts from "@/components/base/Toasts.svelte";
     import Toggler from "@/components/base/Toggler.svelte";
     import { appName, hideControls, pageTitle } from "@/stores/app";
-    import { activationStatus, resetActivationStatus, setActivationStatus } from "@/stores/activation";
     import { resetConfirmation } from "@/stores/confirmation";
     import { setErrors } from "@/stores/errors";
     import { superuser } from "@/stores/superuser";
@@ -64,7 +63,6 @@
             $appName = settings?.meta?.appName || "";
             $hideControls = !!settings?.meta?.hideControls;
 
-            await loadActivationStatus();
         } catch (err) {
             if (!err?.isAbort) {
                 console.warn("Failed to load app settings.", err);
@@ -74,23 +72,6 @@
 
     function logout() {
         ApiClient.logout();
-        resetActivationStatus();
-    }
-
-    async function loadActivationStatus() {
-        if (!$superuser?.id) {
-            resetActivationStatus();
-            return;
-        }
-
-        try {
-            const status = await ApiClient.send("/api/activation/status", {
-                method: "GET",
-            });
-            setActivationStatus(status);
-        } catch (err) {
-            console.warn("Failed to load activation status.", err);
-        }
     }
 </script>
 

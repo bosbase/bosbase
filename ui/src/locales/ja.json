@@ -1012,39 +1012,5 @@
                 }
             }
         }
-    },
-    "activation": {
-        "label": {
-            "default": "アクティベーション",
-            "activeUntil": "{date} まで有効",
-            "trialExpires": "トライアル終了日: {date}",
-            "expiredOn": "{date} に失効",
-            "expired": "アクティベーションの有効期限が切れました",
-            "required": "アクティベーションが必要です"
-        },
-        "toast": {
-            "verified": "アクティベーションが完了しました。"
-        },
-        "modal": {
-            "title": "アクティベーション",
-            "activatedEmail": "有効化済みメール: {email}",
-            "email": "メール",
-            "code": "アクティベーションコード",
-            "mode": "アクティベーション方式",
-            "modeOffline": "オフライン（外部通信なし）",
-            "modeOnline": "オンライン（アクティベーションサーバーに接続）",
-            "modeHelp": "サーバーにアクセスできない場合はオフラインを選択してください。",
-            "activateNow": "有効化する"
-        },
-        "reminder": {
-            "title": "ライセンス通知",
-            "subscription": "サブスクリプション期限: {date}",
-            "trial": "トライアル期限: {date}",
-            "generic": "アクティベーションの期限が近づいています。",
-            "cta": "中断を防ぐためライセンスを購入または更新してください。",
-            "snooze": "後で通知",
-            "disable": "今後表示しない",
-            "activateNow": "今すぐ有効化"
-        }
     }
 }

@@ -1012,39 +1012,5 @@
                 }
             }
         }
-    },
-    "activation": {
-        "label": {
-            "default": "Aktivierung",
-            "activeUntil": "Aktiv bis {date}",
-            "trialExpires": "Testversion läuft ab {date}",
-            "expiredOn": "Abgelaufen am {date}",
-            "expired": "Aktivierung abgelaufen",
-            "required": "Aktivierung erforderlich"
-        },
-        "toast": {
-            "verified": "Aktivierung bestätigt."
-        },
-        "modal": {
-            "title": "Aktivierung",
-            "activatedEmail": "Aktivierte E-Mail: {email}",
-            "email": "E-Mail",
-            "code": "Aktivierungscode",
-            "mode": "Aktivierungsmodus",
-            "modeOffline": "Offline (keine externe Anfrage)",
-            "modeOnline": "Online (verbindet sich mit Aktivierungsserver)",
-            "modeHelp": "Wähle Offline, falls dein Netzwerk den Aktivierungsserver nicht erreicht.",
-            "activateNow": "Aktivieren"
-        },
-        "reminder": {
-            "title": "Lizenzhinweis",
-            "subscription": "Abonnement läuft ab {date}",
-            "trial": "Testversion läuft ab {date}",
-            "generic": "Aktivierung läuft bald ab.",
-            "cta": "Bitte Lizenz kaufen oder verlängern, um Unterbrechungen zu vermeiden.",
-            "snooze": "Später erinnern",
-            "disable": "Nicht mehr erinnern",
-            "activateNow": "Jetzt aktivieren"
-        }
     }
 }

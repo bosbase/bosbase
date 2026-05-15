@@ -125,7 +125,6 @@ type settings struct {
 	Backups      BackupsConfig      `form:"backups" json:"backups"`
 	S3           S3Config           `form:"s3" json:"s3"`
 	Meta         MetaConfig         `form:"meta" json:"meta"`
-	Activation   ActivationConfig   `form:"activation" json:"activation"`
 	RateLimits   RateLimitsConfig   `form:"rateLimits" json:"rateLimits"`
 	TrustedProxy TrustedProxyConfig `form:"trustedProxy" json:"trustedProxy"`
 	Batch        BatchConfig        `form:"batch" json:"batch"`
@@ -166,8 +165,7 @@ func newDefaultSettings() *Settings {
 			Backups: BackupsConfig{
 				CronMaxKeep: 3,
 			},
-			Activation: newDefaultActivationConfig(),
-			Batch: BatchConfig{
+				Batch: BatchConfig{
 				Enabled:     false,
 				MaxRequests: 50,
 				Timeout:     3,
@@ -230,7 +228,6 @@ func (s *Settings) PostScan() error {
 
 	s.mu.Lock()
 	s.Logs.MinLevel = normalizeLogsMinLevel(s.Logs.MinLevel)
-	s.Activation.ensureDefaults()
 	s.mu.Unlock()
 
 	return nil
@@ -293,7 +290,6 @@ func (s *Settings) PostValidate(ctx context.Context, app App) error {
 		validation.Field(&s.SMTP),
 		validation.Field(&s.S3),
 		validation.Field(&s.Backups),
-		validation.Field(&s.Activation),
 		validation.Field(&s.Batch),
 		validation.Field(&s.RateLimits),
 		validation.Field(&s.TrustedProxy),
@@ -345,8 +341,6 @@ func (s *Settings) MarshalJSON() ([]byte, error) {
 		&copy.SMTP.Password,
 		&copy.S3.Secret,
 		&copy.Backups.S3.Secret,
-		&copy.Activation.ActivationCodeHash,
-		&copy.Activation.ActivationSeal,
 	}
 
 	// mask all sensitive fields
@@ -357,31 +351,6 @@ func (s *Settings) MarshalJSON() ([]byte, error) {
 	}
 
 	return json.Marshal(copy)
-}
-
-// StartTrialIfUnset initializes the trial window if it hasn't been started yet.
-func (s *Settings) StartTrialIfUnset(now time.Time) bool {
-	s.mu.Lock()
-	defer s.mu.Unlock()
-
-	return s.Activation.StartTrialIfUnset(now)
-}
-
-// ApplyActivationVerification saves a verified activation result onto the settings.
-func (s *Settings) ApplyActivationVerification(result ActivationVerificationResult) {
-	s.mu.Lock()
-	defer s.mu.Unlock()
-
-	s.Activation.ApplyVerification(result)
-	s.Activation.ensureDefaults()
-}
-
-// CurrentActivationStatus returns a computed activation status snapshot.
-func (s *Settings) CurrentActivationStatus(now time.Time) ActivationStatus {
-	s.mu.RLock()
-	defer s.mu.RUnlock()
-
-	return s.Activation.Status(now)
 }
 
 // -------------------------------------------------------------------
