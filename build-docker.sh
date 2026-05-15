@@ -2,3 +2,13 @@ docker build -t bosbase:ve1 .
 docker build -t bosbase:ve1 -f docker/Dockerfile .
 docker tag bosbase:ve1 bosbase/bosbase:ve1
 docker push bosbase/bosbase:ve1
+
+
+
+
+
+docker build -t bosbase:0.0.1 -f docker/dockerfile .
+docker tag bosbase:0.0.1 bosbase/bosbase:0.0.1
+docker tag bosbase:0.0.1 bosbase/bosbase:latest
+docker push bosbase/bosbase:0.0.1
+docker push bosbase/bosbase:latest
