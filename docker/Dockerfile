@@ -177,7 +177,7 @@ RUN chmod +x /pb/start-gunicorn.sh /pb/start-bosbase.sh
 # RUN chmod +x /pb/start-booster.sh
 
 ENV PATH="/usr/local/bin:${PATH}"
-ENV LD_LIBRARY_PATH="/usr/local/lib:${LD_LIBRARY_PATH}"
+ENV LD_LIBRARY_PATH="/usr/local/lib"
 # Uncomment to bake in project migrations or hooks.
 # COPY ./pb_migrations /pb/pb_migrations
 # COPY ./pb_hooks /pb/pb_hooks

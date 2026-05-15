@@ -1180,6 +1180,8 @@ export default class CommonHelper {
                 return "ri-lock-password-line";
             case "autodate":
                 return "ri-calendar-check-line";
+            case "vector":
+                return "ri-node-tree";
             default:
                 return "ri-star-s-line";
         }
@@ -1205,6 +1207,8 @@ export default class CommonHelper {
                     return 'String';
                 }
                 return 'Array<String>';
+            case 'vector':
+                return 'Array<Number>';
             default:
                 return 'String';
         }

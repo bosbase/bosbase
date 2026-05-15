@@ -60,13 +60,23 @@ examples/base/Dockerfile
 examples/base/docker-compose.yml
 
 # Docker data directories (to avoid permission issues during build)
+# Both forms (with and without trailing slash) are listed because BuildKit
+# evaluates exclusions before os.Open only when the pattern has no trailing slash.
+docker/postgres-data
 docker/postgres-data/
+docker/_postgres-data
 docker/_postgres-data/
+docker/bosbase-data
 docker/bosbase-data/
+docker/bosbase-data-2
 docker/bosbase-data-2/
+**/postgres-data
 **/postgres-data/
+**/_postgres-data
 **/_postgres-data/
+**/bosbase-data
 **/bosbase-data/
+**/bosbase-data-2
 **/bosbase-data-2/
 
 # CI/CD configuration (may contain sensitive info)

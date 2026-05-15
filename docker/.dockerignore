@@ -1,0 +1,9 @@
+# Exclude postgres runtime data directory.
+# This directory is owned by UID 999 (postgres) with drwx------ permissions,
+# which causes Docker BuildKit's file sender to fail with "permission denied"
+# when trying to traverse the build context.
+postgres-data
+_postgres-data
+bosbase-data
+bosbase-data-2
+pythonplugin/data

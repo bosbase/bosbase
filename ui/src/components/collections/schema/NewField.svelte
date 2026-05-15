@@ -48,7 +48,7 @@
         {
             label: $_("common.database.fieldPreset.autoDate"),
             value: "autodate",
-            icon: CommonHelper.getFieldTypeIcon("autoDdate"),
+            icon: CommonHelper.getFieldTypeIcon("autodate"),
         },
         {
             label: $_("common.database.fieldPreset.select"),
@@ -69,6 +69,11 @@
             label: $_("common.database.fieldPreset.json"),
             value: "json",
             icon: CommonHelper.getFieldTypeIcon("json"),
+        },
+        {
+            label: $_("common.database.fieldPreset.vector"),
+            value: "vector",
+            icon: CommonHelper.getFieldTypeIcon("vector"),
         },
         // {
         //     label: "Password",

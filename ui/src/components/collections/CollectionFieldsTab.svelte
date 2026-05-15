@@ -15,6 +15,7 @@
     import SchemaFieldSelect from "@/components/collections/schema/SchemaFieldSelect.svelte";
     import SchemaFieldText from "@/components/collections/schema/SchemaFieldText.svelte";
     import SchemaFieldUrl from "@/components/collections/schema/SchemaFieldUrl.svelte";
+    import SchemaFieldVector from "@/components/collections/schema/SchemaFieldVector.svelte";
     import { scaffolds } from "@/stores/collections";
     import { setErrors } from "@/stores/errors";
     import CommonHelper from "@/utils/CommonHelper";
@@ -37,6 +38,7 @@
         relation: SchemaFieldRelation,
         password: SchemaFieldPassword,
         autodate: SchemaFieldAutodate,
+        vector: SchemaFieldVector,
     };
 
     $: if (!collection.id && oldCollectionType != collection.type) {
