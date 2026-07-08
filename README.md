@@ -6,7 +6,7 @@ Bosbase is completely free for personal use and for large-scale enterprise deplo
 
 Bosbase is built on the foundation of PocketBase — huge thanks to the PocketBase project for the inspiration! We extended and redesigned it from first principles to better support large-scale commercial deployments, PostgreSQL as the primary database (with pgvector for vector capabilities), zero-downtime hot-reload for complex business logic, WASM plugins, and AI-assisted operations.
 
-[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Docker Image](https://img.shields.io/docker/pulls/bosbase/bosbase.svg)](https://hub.docker.com/r/bosbase/bosbase)
 
 ## Features
@@ -16,7 +16,7 @@ Bosbase is built on the foundation of PocketBase — huge thanks to the PocketBa
 - **Hot-reload & zero-downtime updates** — Implement and modify complex business logic without restarting the service.
 - **PostgreSQL backend** — Scalable, production-ready with PostgreSQL support for enterprise-grade deployments and cost reduction.
 - **Extensible platform** — Designed for AI-driven automated operations and custom extensions.
-- **Permanently open source & free** — Apache 2.0 licensed, completely free for personal use and large-scale enterprise deployments. Fully community-managed with no licensing fees.
+- **Permanently open source & free** — MIT licensed, completely free for personal use and large-scale enterprise deployments. Fully community-managed with no licensing fees.
 
 ## About Bosbase
 
@@ -120,7 +120,7 @@ Bosbase would not exist without [PocketBase](https://pocketbase.io/) — thank y
 
 ## License
 
-Apache License 2.0 — see [LICENSE](LICENSE) for details.
+MIT License — see [LICENSE](LICENSE) for details.
 
 ### Our Commitment
 
