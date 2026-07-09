@@ -68,6 +68,15 @@ Questions, feedback, or issues? Reach out at **support@bosbase.com**
 ### Official Documentation
 [Bosbase docs](https://docs.bosbase.com/docs/sdk/)
 
+### API Reference
+
+The backend HTTP, SSE, and WebSocket interface documentation is available in the local [`apidocs/`](apidocs/) directory:
+
+- Start here: [`apidocs/API_REFERENCE.md`](apidocs/API_REFERENCE.md)
+- Categorized API docs: [`apidocs/api-reference/README.md`](apidocs/api-reference/README.md)
+
+These documents describe request bodies, field meanings, types, examples, response formats, and endpoint usage for direct API integration.
+
 ### Frontend Templates & SDKs
 
 Bosbase provides ready-to-use templates and SDKs for popular frameworks:
