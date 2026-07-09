@@ -9,10 +9,10 @@ import (
 	"time"
 
 	"dbx"
-	"github.com/gofrs/uuid/v5"
 	"github.com/bosbase/bosbase-enterprise/core"
 	"github.com/bosbase/bosbase-enterprise/tools/router"
 	"github.com/bosbase/bosbase-enterprise/tools/security"
+	"github.com/gofrs/uuid/v5"
 	"github.com/spf13/cast"
 )
 
@@ -163,7 +163,7 @@ func vectorCreateCollection(e *core.RequestEvent) error {
 	}
 
 	// Validate distance metric
-	validDistances := []string{"cosine", "l2", "inner_product"}
+	validDistances := []string{"cosine", "l2", "inner_product", "l1"}
 	isValid := false
 	for _, d := range validDistances {
 		if distance == d {
@@ -241,6 +241,8 @@ func vectorCreateCollection(e *core.RequestEvent) error {
 		indexSQL = fmt.Sprintf(`CREATE INDEX IF NOT EXISTS idx_%s_vector_l2 ON {{%s}} USING ivfflat (vector vector_l2_ops);`, tableName, tableName)
 	case "inner_product":
 		indexSQL = fmt.Sprintf(`CREATE INDEX IF NOT EXISTS idx_%s_vector_ip ON {{%s}} USING ivfflat (vector vector_ip_ops);`, tableName, tableName)
+	case "l1":
+		indexSQL = fmt.Sprintf(`CREATE INDEX IF NOT EXISTS idx_%s_vector_l1 ON {{%s}} USING ivfflat (vector vector_l1_ops);`, tableName, tableName)
 	}
 
 	_, err = e.App.DB().NewQuery(createTableSQL + indexSQL).Execute()
@@ -285,7 +287,7 @@ func vectorUpdateCollection(e *core.RequestEvent) error {
 
 	if config.Distance != "" && config.Distance != existingCollection.Distance {
 		// Validate distance metric
-		validDistances := []string{"cosine", "l2", "inner_product"}
+		validDistances := []string{"cosine", "l2", "inner_product", "l1"}
 		isValid := false
 		for _, d := range validDistances {
 			if config.Distance == d {
@@ -299,7 +301,7 @@ func vectorUpdateCollection(e *core.RequestEvent) error {
 		updates["distance"] = config.Distance
 
 		// Drop old index and create new one based on new distance metric
-		dropIndexSQL := fmt.Sprintf(`DROP INDEX IF EXISTS idx_%s_vector_cosine, idx_%s_vector_l2, idx_%s_vector_ip;`, collectionName, collectionName, collectionName)
+		dropIndexSQL := fmt.Sprintf(`DROP INDEX IF EXISTS idx_%s_vector_cosine, idx_%s_vector_l2, idx_%s_vector_ip, idx_%s_vector_l1;`, collectionName, collectionName, collectionName, collectionName)
 		var indexSQL string
 		switch config.Distance {
 		case "cosine":
@@ -308,6 +310,8 @@ func vectorUpdateCollection(e *core.RequestEvent) error {
 			indexSQL = fmt.Sprintf(`CREATE INDEX IF NOT EXISTS idx_%s_vector_l2 ON {{%s}} USING ivfflat (vector vector_l2_ops);`, collectionName, collectionName)
 		case "inner_product":
 			indexSQL = fmt.Sprintf(`CREATE INDEX IF NOT EXISTS idx_%s_vector_ip ON {{%s}} USING ivfflat (vector vector_ip_ops);`, collectionName, collectionName)
+		case "l1":
+			indexSQL = fmt.Sprintf(`CREATE INDEX IF NOT EXISTS idx_%s_vector_l1 ON {{%s}} USING ivfflat (vector vector_l1_ops);`, collectionName, collectionName)
 		}
 		_, err = e.App.DB().NewQuery(dropIndexSQL + indexSQL).Execute()
 		if err != nil {
@@ -824,17 +828,26 @@ func vectorSearch(e *core.RequestEvent) error {
 		limit = 100
 	}
 
-	// Get distance metric SQL function
+	// Get pgvector metric SQL expressions. distanceSQL is returned with each result;
+	// orderSQL is always the raw distance/operator value used for nearest-neighbour ordering.
 	var distanceSQL string
+	var orderSQL string
 	switch distance {
 	case "cosine":
 		distanceSQL = "1 - (vector <=> {:queryVector}::vector)"
+		orderSQL = "vector <=> {:queryVector}::vector"
 	case "l2":
 		distanceSQL = "vector <-> {:queryVector}::vector"
+		orderSQL = distanceSQL
 	case "inner_product":
 		distanceSQL = "vector <#> {:queryVector}::vector"
+		orderSQL = distanceSQL
+	case "l1":
+		distanceSQL = "vector <+> {:queryVector}::vector"
+		orderSQL = distanceSQL
 	default:
 		distanceSQL = "1 - (vector <=> {:queryVector}::vector)" // default to cosine
+		orderSQL = "vector <=> {:queryVector}::vector"
 	}
 
 	startTime := time.Now()
@@ -882,12 +895,12 @@ func vectorSearch(e *core.RequestEvent) error {
 		SELECT %s
 		FROM {{%s}}
 		%s
-		ORDER BY vector <=> {:queryVector}::vector
+		ORDER BY %s
 		LIMIT {:limit};
-	`, selectFields, collectionName, whereSQL)
+	`, selectFields, collectionName, whereSQL, orderSQL)
 
 	// For cosine similarity, score = 1 - distance
-	// For L2, score = 1 / (1 + distance) to normalize to 0-1 range
+	// For L2/L1, score = 1 / (1 + distance) to normalize to 0-1 range
 	// For inner product, we'll use it directly but may need normalization
 
 	var results []struct {
@@ -912,8 +925,8 @@ func vectorSearch(e *core.RequestEvent) error {
 		var score float64
 		if distance == "cosine" {
 			score = r.Distance // Already 1 - distance
-		} else if distance == "l2" {
-			score = 1.0 / (1.0 + r.Distance) // Normalize L2 to 0-1
+		} else if distance == "l2" || distance == "l1" {
+			score = 1.0 / (1.0 + r.Distance) // Normalize L2/L1 to 0-1
 		} else {
 			score = r.Distance // inner_product - may need adjustment
 		}

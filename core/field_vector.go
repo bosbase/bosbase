@@ -7,8 +7,8 @@ import (
 	"strconv"
 	"strings"
 
-	validation "github.com/go-ozzo/ozzo-validation/v4"
 	"github.com/bosbase/bosbase-enterprise/core/validators"
+	validation "github.com/go-ozzo/ozzo-validation/v4"
 )
 
 func init() {
@@ -61,8 +61,9 @@ type VectorField struct {
 	// Defaults to 1536 (OpenAI embedding size) if not set.
 	Dimension int `form:"dimension" json:"dimension"`
 
-	// Distance specifies the distance metric used for similarity search.
-	// Valid values: "cosine", "l2", "inner_product". Defaults to "cosine".
+	// Distance specifies the pgvector distance metric used for similarity search.
+	// Valid values for the float vector(N) type: "cosine", "l2", "inner_product", "l1".
+	// Defaults to "cosine".
 	Distance string `form:"distance" json:"distance"`
 }
 
@@ -184,7 +185,7 @@ func (f *VectorField) ValidateValue(ctx context.Context, app App, record *Record
 
 // ValidateSettings implements [Field.ValidateSettings] interface method.
 func (f *VectorField) ValidateSettings(ctx context.Context, app App, collection *Collection) error {
-	validDistances := []any{"cosine", "l2", "inner_product"}
+	validDistances := []any{"cosine", "l2", "inner_product", "l1"}
 
 	return validation.ValidateStruct(f,
 		validation.Field(&f.Id, validation.By(DefaultFieldIdValidationRule)),
