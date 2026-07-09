@@ -1,17 +1,17 @@
 services:
   bosbase-node:
-    image: bosbase:latest
+    image: bosbase/bosbase:latest
     restart: unless-stopped
     environment:
       SASSPB_POSTGRES_URL: postgres://postgres:postgres@postgres-db:5432/pbosbase?sslmode=disable
       BS_ENCRYPTION_KEY: 0123456789abcdef0123456789abcdef
-      OPENAI_API_KEY: ${OPENAI_API_KEY:-sk-af61vU1kIT0uw5YzOM7VRM3KGrxBAfuhVgJX9ghtkHfdRVsu}
-      OPENAI_BASE_URL: ${OPENAI_BASE_URL:-https://api.chatanywhere.org/v1}
+      # OPENAI_API_KEY: ${OPENAI_API_KEY:-sk-af61vU1kIT0uw5YzOM7VRM3KGrxBAfuhVgJX9ghtkHfdRVsu}
+      # OPENAI_BASE_URL: ${OPENAI_BASE_URL:-https://api.chatanywhere.org/v1}
       # REDIS_URL: ${REDIS_URL:-192.168.1.60:6379}
       # REDIS_PASSWORD: ${REDIS_PASSWORD:-}
       WASM_ENABLE: ${WASM_ENABLE:-true}
-      WASM_INSTANCE_NUM: ${WASM_INSTANCE_NUM:-32}
-      SCRIPT_CONCURRENCY: ${SCRIPT_CONCURRENCY:-32}
+      WASM_INSTANCE_NUM: ${WASM_INSTANCE_NUM:-2}
+      SCRIPT_CONCURRENCY: ${SCRIPT_CONCURRENCY:-2}
       FUNCTION_CONN_NUM: ${FUNCTION_CONN_NUM:-10}
       EXECUTE_PATH: ${EXECUTE_PATH:-/pb/functions}
       # BOOSTER_PATH: ${BOOSTER_PATH:-/pb/booster-wasm}
@@ -66,5 +66,4 @@ services:
 
 networks:
   basenode:
-    external: true
     name: basenode
