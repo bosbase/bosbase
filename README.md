@@ -85,8 +85,6 @@ services:
       POSTGRES_PASSWORD: postgres
     volumes:
       - ./postgres-data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
     networks:
       - basenode
     healthcheck:
