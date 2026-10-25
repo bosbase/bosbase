@@ -28,7 +28,7 @@ services:
     environment:
       SASSPB_POSTGRES_URL: postgres://postgres:postgres@postgres-db:5432/pbosbase?sslmode=disable
       BS_ENCRYPTION_KEY: 0123456789abcdef0123456789abcdef
-      OPENAI_API_KEY: ${OPENAI_API_KEY:-sk-af61vU1kIT0uw5YzOM7VRM3KGrxBAfuhVgJX9ghtkHfdRVsu}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
       OPENAI_BASE_URL: ${OPENAI_BASE_URL:-https://api.chatanywhere.org/v1}
     ports:
       - "8090:8090"
@@ -51,7 +51,7 @@ services:
     environment:
       SASSPB_POSTGRES_URL: postgres://postgres:postgres@postgres-db:5432/pbosbase?sslmode=disable
       BS_ENCRYPTION_KEY: 0123456789abcdef0123456789abcdef
-      OPENAI_API_KEY: ${OPENAI_API_KEY:-sk-af61vU1kIT0uw5YzOM7VRM3KGrxBAfuhVgJX9ghtkHfdRVsu}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
       OPENAI_BASE_URL: ${OPENAI_BASE_URL:-https://api.chatanywhere.org/v1}
     ports:
       - "8091:8090"

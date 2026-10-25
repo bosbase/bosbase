@@ -10,7 +10,7 @@ services:
     environment:
       SASSPB_POSTGRES_URL: postgres://postgres:postgres@postgres-db:5432/pbosbase?sslmode=disable
       BS_ENCRYPTION_KEY: 0123456789abcdef0123456789abcdef
-      OPENAI_API_KEY: ${OPENAI_API_KEY:-sk-af61vU1kIT0uw5YzOM7VRM3KGrxBAfuhVgJX9ghtkHfdRVsu}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
       OPENAI_BASE_URL: ${OPENAI_BASE_URL:-https://api.chatanywhere.org/v1}
       PB_ACTIVATION_VERIFY_URL: ${PB_ACTIVATION_VERIFY_URL:-https://ve.bosbase.com/verify}
       # REDIS_URL: ${REDIS_URL:-192.168.1.60:6379}
@@ -48,7 +48,7 @@ services:
     environment:
       SASSPB_POSTGRES_URL: postgres://postgres:postgres@postgres-db:5432/pbosbase?sslmode=disable
       BS_ENCRYPTION_KEY: 0123456789abcdef0123456789abcdef
-      OPENAI_API_KEY: ${OPENAI_API_KEY:-sk-af61vU1kIT0uw5YzOM7VRM3KGrxBAfuhVgJX9ghtkHfdRVsu}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
       OPENAI_BASE_URL: ${OPENAI_BASE_URL:-https://api.chatanywhere.org/v1}
       PB_ACTIVATION_VERIFY_URL: ${PB_ACTIVATION_VERIFY_URL:-https://ve.bosbase.com/verify}
       # REDIS_URL: ${REDIS_URL:-192.168.1.60:6379}
