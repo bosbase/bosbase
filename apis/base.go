@@ -61,6 +61,7 @@ func NewRouter(app core.App) (*router.Router[*core.RequestEvent], error) {
 	bindLLMRelayApi(app, apiGroup)
 	bindEmbeddingApi(app, apiGroup)
 	bindMemorySpacesApi(app, apiGroup)
+	bindChatApi(app, apiGroup)
 	bindDiagnosticsApi(app, apiGroup)
 	bindPubSubApi(app, apiGroup)
 	bindCacheApi(app, apiGroup)

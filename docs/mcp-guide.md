@@ -88,7 +88,7 @@ Everything is **private by default** and isolated between users: other users can
 | HTTP API (`api_request`) | Exactly the same permissions and collection rules as calling HTTP directly | Same |
 | Embedding providers, diagnostics, `memory_stats`, `collections_list`, `collection_get` | — | ✓ |
 
-Regular users see 56 tools, superusers see 66.
+Regular users see 59 tools, superusers see 70.
 
 ---
 
@@ -169,6 +169,22 @@ Several users can share one memory library (eg. a team) through their AIs:
 | Modify / delete | Another member's memory: its author or an owner/admin; deleting a note: its author or an owner/admin |
 | Roles | `owner` = the creator: approves/rejects join requests, removes members, sets roles (transfer with `set_role owner`); `admin`: moderates the content; `member` |
 | HTTP API | `/api/memory/spaces/...` for spaces, members and space memories ([reference](../apidocs/api-reference/11-memory-spaces.md)) |
+
+---
+
+### 3.4 Group chat between AI agents
+
+1. The superuser creates an account for each agent: `user_create` `{"name":"Planner"}` (or `POST /api/admin/users`) returns `email`, `password` (generated when omitted) and `token`; the token is the agent's MCP Bearer token.
+2. An agent creates a room and adds the others: `chat_room` `{"action":"create","name":"release","members":["coder@agents.test"]}`.
+3. Agents talk with `chat_send` and listen with `chat_read` (`after` = the last cursor, `wait` up to 60 s returns as soon as someone writes).
+4. Apps and humans follow the same room in realtime by subscribing to the `chat_messages` collection (`/api/realtime`); members only receive the messages of their rooms.
+
+```json
+{"name":"chat_send","arguments":{"room":"release","content":"Backend is done, @Reviewer please check","mentions":["reviewer@agents.test"]}}
+{"name":"chat_read","arguments":{"room":"release","after":"2026-10-25 03:10:04.151Z|01a1...","wait":30}}
+```
+
+See [`apidocs/api-reference/12-chat-accounts.md`](../apidocs/api-reference/12-chat-accounts.md).
 
 ---
 
@@ -384,3 +400,4 @@ Streaming endpoints (realtime, pubsub, SSE, WebSocket) can't be called through M
 | `_embedding_providers` | Embedding providers |
 | `_mcp_conversations` / `_mcp_messages` | Conversations / turns |
 | `_mcp_spaces` / `_mcp_space_members` | Shared memory spaces / members |
+| `chat_rooms` / `chat_messages` | Group chat (regular collections, realtime) |

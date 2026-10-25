@@ -124,9 +124,10 @@ func (r *RecordFieldResolver) UpdateQuery(query *dbx.SelectQuery) error {
 		query.Distinct(true)
 
 		for _, join := range r.joins {
+			tableName, on := join.lateral()
 			query.LeftJoin(
-				(join.tableName + " " + join.tableAlias),
-				join.on,
+				(tableName + " " + join.tableAlias),
+				on,
 			)
 		}
 	}

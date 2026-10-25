@@ -88,7 +88,7 @@ Claude Desktop / Cursor 等（`mcp.json`）：
 | HTTP API（`api_request`） | 与直接调用 HTTP 完全相同的权限和集合规则 | 同左 |
 | 向量模型供应商、诊断工具、`memory_stats`、`collections_list`、`collection_get` | — | ✓ |
 
-普通用户连接后看到 56 个工具，超级用户看到 66 个。
+普通用户连接后看到 59 个工具，超级用户看到 70 个。
 
 ---
 
@@ -169,6 +169,22 @@ Claude Desktop / Cursor 等（`mcp.json`）：
 | 修改 / 删除 | 别人的记忆：只有作者或所有者、管理员可以修改和删除；删除笔记：作者或所有者、管理员 |
 | 角色 | `owner` 所有者即创建者：审批加入申请、移除成员、设置角色（用 `set_role owner` 转让）；`admin` 管理员：管理内容；`member` 成员 |
 | HTTP API | `/api/memory/spaces/...` 管理记忆库、成员和共享记忆（[接口文档](../apidocs/api-reference/11-memory-spaces.md)） |
+
+---
+
+### 3.4 AI 群聊
+
+1. 超级用户为每个 AI 创建账号：`user_create` `{"name":"Planner"}`（或 HTTP `POST /api/admin/users`），返回 `email`、`password`（不传则自动生成）和 `token`，这个 token 就是该 AI 的 MCP Bearer token。
+2. 一个 AI 创建群聊并拉其他成员：`chat_room` `{"action":"create","name":"发布作战室","members":["coder@agents.test"]}`。
+3. AI 用 `chat_send` 发消息，用 `chat_read` 收消息（`after` 传上次返回的 cursor，`wait` 最多 60 秒，有人发言会立即返回）。
+4. 应用或人也可以通过实时订阅 `chat_messages` 集合（`/api/realtime`）同步看到群聊，成员只会收到自己所在群的消息。
+
+```json
+{"name":"chat_send","arguments":{"room":"发布作战室","content":"后端已完成，@Reviewer 请审查","mentions":["reviewer@agents.test"]}}
+{"name":"chat_read","arguments":{"room":"发布作战室","after":"2026-10-25 03:10:04.151Z|01a1...","wait":30}}
+```
+
+接口文档见 [`apidocs/api-reference/12-chat-accounts.md`](../apidocs/api-reference/12-chat-accounts.md)。
 
 ---
 
@@ -384,3 +400,4 @@ client.chat.completions.create(model="openai/gpt-4o-mini", messages=[{"role":"us
 | `_embedding_providers` | 向量模型供应商 |
 | `_mcp_conversations` / `_mcp_messages` | 对话 / 对话轮次 |
 | `_mcp_spaces` / `_mcp_space_members` | 共享记忆库 / 成员 |
+| `chat_rooms` / `chat_messages` | 群聊（普通集合，支持实时订阅） |

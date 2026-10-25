@@ -16,6 +16,16 @@ type join struct {
 	on         dbx.Expression
 }
 
+// lateral returns the join table and condition for PostgreSQL: the subquery joins
+// without condition (eg. the jsonb_array_elements of a multiple relation field)
+// reference the outer table, so they must be LATERAL with an ON TRUE condition.
+func (j *join) lateral() (string, dbx.Expression) {
+	if j.on == nil && strings.HasPrefix(strings.TrimSpace(j.tableName), "(") {
+		return "LATERAL " + j.tableName, dbx.NewExp("TRUE")
+	}
+	return j.tableName, j.on
+}
+
 // multiMatchSubquery defines a record multi-match subquery expression.
 type multiMatchSubquery struct {
 	baseTableAlias  string
@@ -48,13 +58,14 @@ func (m *multiMatchSubquery) Build(db *dbx.DB, params dbx.Params) string {
 		if i > 0 {
 			mergedJoins.WriteString(" ")
 		}
+		tableName, on := j.lateral()
 		mergedJoins.WriteString("LEFT JOIN ")
-		mergedJoins.WriteString(db.QuoteTableName(j.tableName))
+		mergedJoins.WriteString(db.QuoteTableName(tableName))
 		mergedJoins.WriteString(" ")
 		mergedJoins.WriteString(db.QuoteTableName(j.tableAlias))
-		if j.on != nil {
+		if on != nil {
 			mergedJoins.WriteString(" ON ")
-			mergedJoins.WriteString(j.on.Build(db, params))
+			mergedJoins.WriteString(on.Build(db, params))
 		}
 	}
 

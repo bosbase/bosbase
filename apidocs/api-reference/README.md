@@ -25,6 +25,7 @@ This folder contains the BosBase backend API documentation organized by interfac
 - [MCP Server (AI memory, knowledge vault, full API access)](./09-mcp.md)
 - [Object Storage, LLM Relay, Embedding Providers and Diagnostics](./10-storage-llm-diagnostics.md)
 - [Memory Spaces (shared memories)](./11-memory-spaces.md)
+- [Group Chat and Agent Accounts](./12-chat-accounts.md)
 
 MCP user guide: [docs/mcp-guide.md](../../docs/mcp-guide.md) ([中文](../../docs/mcp-guide.zh-CN.md))
 

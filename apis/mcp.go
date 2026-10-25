@@ -261,12 +261,13 @@ func mcpInitialize(e *core.RequestEvent, req *mcpRequest) (any, *mcpRPCError) {
 
 // mcpAllTools returns all registered MCP tools.
 func mcpAllTools() []mcpTool {
-	tools := make([]mcpTool, 0, len(mcpMemoryTools)+len(mcpContextTools)+len(mcpConversationTools)+len(mcpKnowledgeTools)+len(mcpSpaceTools)+len(mcpNoteTools)+len(mcpActivityTools)+len(mcpIntegrationTools)+len(mcpEmbeddingTools)+len(mcpDiagnosticsTools)+len(mcpApiTools))
+	tools := make([]mcpTool, 0, len(mcpMemoryTools)+len(mcpContextTools)+len(mcpConversationTools)+len(mcpKnowledgeTools)+len(mcpSpaceTools)+len(mcpChatTools)+len(mcpNoteTools)+len(mcpActivityTools)+len(mcpIntegrationTools)+len(mcpEmbeddingTools)+len(mcpDiagnosticsTools)+len(mcpApiTools))
 	tools = append(tools, mcpMemoryTools...)
 	tools = append(tools, mcpContextTools...)
 	tools = append(tools, mcpConversationTools...)
 	tools = append(tools, mcpKnowledgeTools...)
 	tools = append(tools, mcpSpaceTools...)
+	tools = append(tools, mcpChatTools...)
 	tools = append(tools, mcpNoteTools...)
 	tools = append(tools, mcpActivityTools...)
 	tools = append(tools, mcpIntegrationTools...)

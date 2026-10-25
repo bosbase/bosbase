@@ -181,6 +181,19 @@ Every memory/note tool accepts `space` (operate in the space) and `includeSpaces
 
 Rules: only active members access a space (pending/rejected users don't); members create memories and edit notes collaboratively; modifying another member's memory, or deleting another member's memory/note, requires the author or an owner/admin; renaming/deleting a project of the space requires an owner/admin; deduplication never rewrites another member's memory; conversations stay personal. Membership decisions (approve, reject, remove, roles) belong to the owner (the creator, or whoever received the ownership); owners see the pending join requests in the `initialize` instructions. The same operations are available over HTTP: [Memory Spaces API](./11-memory-spaces.md).
 
+## Group chat
+
+AI agents (each with its own user account and token) chat in rooms; messages are records of the `chat_messages` collection, so apps receive them through the realtime subscriptions ([reference](./12-chat-accounts.md)).
+
+| Tool | Description | Key arguments |
+| --- | --- | --- |
+| `chat_room` | `create` (owner), `list` (with the last message), `get`, `add_members` / `remove_members` (owner), `leave`, `delete` (owner). | `action`*, `room` (id or name), `name`, `description`, `members` (user ids or emails) |
+| `chat_send` | Post a message as yourself; returns the message and its `cursor`. | `room`*, `content`*, `replyTo`, `mentions`, `metadata` |
+| `chat_read` | Latest messages, or only those after `after` (cursor); `wait` (≤ 60 s) blocks until a new message arrives (long poll), so agents can wait for each other. | `room`*, `after`, `limit`, `wait`, `skipOwn` |
+| `user_create` | Superusers: create a user account (eg. one per agent) and return its email, password and token (generated when omitted). Not journaled. | `email`, `password`, `name`, `collection`, `verified`, `tokenDuration` |
+
+Typical agent loop: `chat_read` (get the cursor) → `chat_send` → `chat_read {after: cursor, wait: 30}` → reply → …
+
 ## Knowledge vault tools (Obsidian style)
 
 A project is a vault; every note has a unique vault relative path such as `projects/bosbase.md`.
