@@ -14,7 +14,7 @@ import (
 func TestTokenFunctionsGeoDistance(t *testing.T) {
 	t.Parallel()
 
-	testDB, err := createTestDB()
+	testDB, err := createTestDBOrSkip(t)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -167,7 +167,7 @@ func TestTokenFunctionsGeoDistance(t *testing.T) {
 func TestTokenFunctionsGeoDistanceExec(t *testing.T) {
 	t.Parallel()
 
-	testDB, err := createTestDB()
+	testDB, err := createTestDBOrSkip(t)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -212,7 +212,7 @@ func TestTokenFunctionsGeoDistanceExec(t *testing.T) {
 // -------------------------------------------------------------------
 
 func testCompareResults(t *testing.T, a, b *ResolverResult) {
-	testDB, err := createTestDB()
+	testDB, err := createTestDBOrSkip(t)
 	if err != nil {
 		t.Fatal(err)
 	}

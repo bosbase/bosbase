@@ -97,7 +97,7 @@ func TestFilterDataBuildExpr(t *testing.T) {
 			"nested json no coalesce",
 			"test5.a = test5.b || test5.c != test5.d",
 			false,
-			"(JSON_EXTRACT([[test5]], '$.a') IS JSON_EXTRACT([[test5]], '$.b') OR JSON_EXTRACT([[test5]], '$.c') IS NOT JSON_EXTRACT([[test5]], '$.d'))",
+			"(jsonb_path_query_first(COALESCE([[test5]]::jsonb, 'null'::jsonb), '$.a') IS NOT DISTINCT FROM jsonb_path_query_first(COALESCE([[test5]]::jsonb, 'null'::jsonb), '$.b') OR jsonb_path_query_first(COALESCE([[test5]]::jsonb, 'null'::jsonb), '$.c') IS DISTINCT FROM jsonb_path_query_first(COALESCE([[test5]]::jsonb, 'null'::jsonb), '$.d'))",
 		},
 		{
 			"macros",
@@ -136,7 +136,7 @@ func TestFilterDataBuildExpr(t *testing.T) {
 			"all operators",
 			"(test1 = test2 || test2 != test3) && (test2 ~ 'example' || test2 !~ '%%abc') && 'switch1%%' ~ test1 && 'switch2' !~ test2 && test3 > 1 && test3 >= 0 && test3 <= 4 && 2 < 5",
 			false,
-			"((COALESCE([[test1]], '') = COALESCE([[test2]], '') OR COALESCE([[test2]], '') != COALESCE([[test3]], '')) AND ([[test2]] LIKE {:TEST} ESCAPE '\\' OR [[test2]] NOT LIKE {:TEST} ESCAPE '\\') AND {:TEST} LIKE ('%' || [[test1]] || '%') ESCAPE '\\' AND {:TEST} NOT LIKE ('%' || [[test2]] || '%') ESCAPE '\\' AND [[test3]] > {:TEST} AND [[test3]] >= {:TEST} AND [[test3]] <= {:TEST} AND {:TEST} < {:TEST})",
+			"((COALESCE([[test1]], '') = COALESCE([[test2]], '') OR COALESCE([[test2]], '') != COALESCE([[test3]], '')) AND ([[test2]] LIKE {:TEST} ESCAPE '\\' OR [[test2]] NOT LIKE {:TEST} ESCAPE '\\') AND {:TEST} LIKE ('%' || [[test1]] || '%') ESCAPE '\\' AND {:TEST} NOT LIKE ('%' || [[test2]] || '%') ESCAPE '\\' AND [[test3]] > {:TEST} AND [[test3]] >= {:TEST} AND [[test3]] <= {:TEST} AND ({:TEST}::numeric) < ({:TEST}::numeric))",
 		},
 		{
 			"geoDistance function",
@@ -179,7 +179,7 @@ func TestFilterDataBuildExpr(t *testing.T) {
 }
 
 func TestFilterDataBuildExprWithParams(t *testing.T) {
-	testDB, err := createTestDB()
+	testDB, err := createTestDBOrSkip(t)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -274,7 +274,7 @@ func TestFilterDataBuildExprWithLimit(t *testing.T) {
 }
 
 func TestLikeParamsWrapping(t *testing.T) {
-	testDB, err := createTestDB()
+	testDB, err := createTestDBOrSkip(t)
 	if err != nil {
 		t.Fatal(err)
 	}

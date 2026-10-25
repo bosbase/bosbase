@@ -201,6 +201,51 @@ func TestIndexBuild(t *testing.T) {
 				TableName: "table",
 				Columns:   []dbutils.IndexColumn{{Name: "col"}},
 			},
+			`CREATE INDEX "index" ON "table" ("col")`,
+		},
+		{
+			"all fields",
+			dbutils.Index{
+				Optional:   true,
+				Unique:     true,
+				SchemaName: "schema",
+				IndexName:  "index",
+				TableName:  "table",
+				Columns: []dbutils.IndexColumn{
+					{Name: "col1", Collate: "NOCASE", Sort: "asc"},
+					{Name: "col2", Sort: "desc"},
+					{Name: `json_extract("col3", "$.a")`, Collate: "NOCASE"},
+				},
+				Where: "test = 1 OR test = 2",
+			},
+			// PostgreSQL has no NOCASE collation so it is omitted
+			"CREATE UNIQUE INDEX IF NOT EXISTS \"schema\".\"index\" ON \"table\" (\n  \"col1\" ASC,\n  \"col2\" DESC,\n  " + `json_extract("col3", "$.a")` + "\n) WHERE test = 1 OR test = 2",
+		},
+	}
+
+	for _, s := range scenarios {
+		t.Run(s.name, func(t *testing.T) {
+			result := s.index.Build()
+			if result != s.expected {
+				t.Fatalf("Expected \n%v \ngot \n%v", s.expected, result)
+			}
+		})
+	}
+}
+
+func TestIndexBuildForDriverSQLite(t *testing.T) {
+	scenarios := []struct {
+		name     string
+		index    dbutils.Index
+		expected string
+	}{
+		{
+			"min valid",
+			dbutils.Index{
+				IndexName: "index",
+				TableName: "table",
+				Columns:   []dbutils.IndexColumn{{Name: "col"}},
+			},
 			"CREATE INDEX `index` ON `table` (`col`)",
 		},
 		{
@@ -224,7 +269,7 @@ func TestIndexBuild(t *testing.T) {
 
 	for _, s := range scenarios {
 		t.Run(s.name, func(t *testing.T) {
-			result := s.index.Build()
+			result := s.index.BuildForDriver("sqlite")
 			if result != s.expected {
 				t.Fatalf("Expected \n%v \ngot \n%v", s.expected, result)
 			}

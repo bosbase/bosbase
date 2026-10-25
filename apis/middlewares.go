@@ -449,7 +449,7 @@ func logRequest(event *core.RequestEvent, err error) {
 		if info, err := event.RequestInfo(); err == nil && len(info.Body) > 0 {
 			body := make(map[string]any, len(info.Body))
 			for k, v := range info.Body {
-				body[k] = v
+				body[k] = redactLogValue(k, v)
 			}
 			attrs = append(attrs, slog.Any("body", body))
 		}

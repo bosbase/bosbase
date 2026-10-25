@@ -16,6 +16,7 @@ Bosbase is built on the foundation of PocketBase — huge thanks to the PocketBa
 - **Hot-reload & zero-downtime updates** — Implement and modify complex business logic without restarting the service.
 - **PostgreSQL backend** — Scalable, production-ready with PostgreSQL support for enterprise-grade deployments and cost reduction.
 - **Extensible platform** — Designed for AI-driven automated operations and custom extensions.
+- **Remote MCP server for AI agents** — AI agents connect to `/api/mcp` with a BosBase token to keep long-term memories (pgvector), maintain an Obsidian-like knowledge vault with a link graph, recall their past actions, store files in S3/R2/GCS, relay LLM calls through stored channels, diagnose errors and call the whole HTTP API. See the [MCP guide](docs/mcp-guide.md) ([中文](docs/mcp-guide.zh-CN.md)) and the [MCP API reference](apidocs/api-reference/09-mcp.md).
 - **Permanently open source & free** — MIT licensed, completely free for personal use and large-scale enterprise deployments. Fully community-managed with no licensing fees.
 
 ## About Bosbase

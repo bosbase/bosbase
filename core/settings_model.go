@@ -6,7 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"log/slog"
-	"os"
 	"regexp"
 	"slices"
 	"strconv"
@@ -49,6 +48,31 @@ func (app *BaseApp) registerSettingsHooks() {
 
 		return nil
 	}
+
+	// prevent overwriting stored settings that couldn't be decrypted
+	// (the app is running with the default settings)
+	guardFunc := func(me *ModelEvent) error {
+		if me.Model.PK() == paramsKeySettings {
+			if IsSettingsUnreadable(me.App) && !allowSettingsReset() {
+				return errors.New("the stored settings can't be decrypted (missing, invalid or different encryption key " +
+					strconv.Quote(me.App.EncryptionEnv()) + "); restore the original key and restart, or set " +
+					AllowSettingsResetEnv + "=true to overwrite them")
+			}
+		}
+		return me.Next()
+	}
+
+	app.OnModelCreate(paramsTable).Bind(&hook.Handler[*ModelEvent]{
+		Id:       systemHookIdSettings,
+		Func:     guardFunc,
+		Priority: -999,
+	})
+
+	app.OnModelUpdate(paramsTable).Bind(&hook.Handler[*ModelEvent]{
+		Id:       systemHookIdSettings,
+		Func:     guardFunc,
+		Priority: -999,
+	})
 
 	app.OnModelAfterCreateSuccess(paramsTable).Bind(&hook.Handler[*ModelEvent]{
 		Id:       systemHookIdSettings,
@@ -263,7 +287,7 @@ func (s *Settings) DBExport(app App) (map[string]any, error) {
 		return nil, err
 	}
 
-	encryptionKey := os.Getenv(app.EncryptionEnv())
+	encryptionKey := EncryptionKey(app)
 	if encryptionKey != "" {
 		encryptVal, encryptErr := security.Encrypt(encoded, encryptionKey)
 		if encryptErr != nil {

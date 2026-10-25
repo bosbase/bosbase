@@ -345,3 +345,73 @@ func getStatus(rw http.ResponseWriter) (int, error) {
 		}
 	}
 }
+
+// RouteInfo describes a single registered route.
+type RouteInfo struct {
+	// Method is the route HTTP method (empty for routes matching any method).
+	Method string
+
+	// Path is the full route path pattern (including the parent group prefixes).
+	Path string
+
+	// MiddlewareIds lists the ids of the named middlewares effectively
+	// applied to the route (anonymous middlewares are omitted).
+	MiddlewareIds []string
+}
+
+// Routes returns a flattened list with the currently registered routes.
+//
+// The middleware exclusion rules are the same as the ones used by [Router.BuildMux].
+func (r *Router[T]) Routes() []RouteInfo {
+	var result []RouteInfo
+	r.collectRoutes(&result, r.RouterGroup, nil)
+	return result
+}
+
+func (r *Router[T]) collectRoutes(result *[]RouteInfo, group *RouterGroup[T], parents []*RouterGroup[T]) {
+	for _, child := range group.children {
+		switch v := child.(type) {
+		case *RouterGroup[T]:
+			r.collectRoutes(result, v, append(parents, group))
+		case *Route[T]:
+			info := RouteInfo{Method: v.Method}
+
+			addId := func(h *hook.Handler[T]) {
+				if h.Id != "" {
+					info.MiddlewareIds = append(info.MiddlewareIds, h.Id)
+				}
+			}
+
+			for _, p := range parents {
+				info.Path += p.Prefix
+				for _, h := range p.Middlewares {
+					if _, ok := p.excludedMiddlewares[h.Id]; !ok {
+						if _, ok = group.excludedMiddlewares[h.Id]; !ok {
+							if _, ok = v.excludedMiddlewares[h.Id]; !ok {
+								addId(h)
+							}
+						}
+					}
+				}
+			}
+
+			info.Path += group.Prefix
+			for _, h := range group.Middlewares {
+				if _, ok := group.excludedMiddlewares[h.Id]; !ok {
+					if _, ok = v.excludedMiddlewares[h.Id]; !ok {
+						addId(h)
+					}
+				}
+			}
+
+			info.Path += v.Path
+			for _, h := range v.Middlewares {
+				if _, ok := v.excludedMiddlewares[h.Id]; !ok {
+					addId(h)
+				}
+			}
+
+			*result = append(*result, info)
+		}
+	}
+}

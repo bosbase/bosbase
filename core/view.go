@@ -25,6 +25,9 @@ func (app *BaseApp) DeleteView(name string) error {
 		"DROP VIEW IF EXISTS {{%s}}",
 		name,
 	)).Execute()
+	if err == nil {
+		invalidateTableExistsCache(app, name)
+	}
 
 	return err
 }
@@ -34,6 +37,8 @@ func (app *BaseApp) DeleteView(name string) error {
 // NB! Be aware that this method is vulnerable to SQL injection and the
 // "selectQuery" argument must come only from trusted input!
 func (app *BaseApp) SaveView(name string, selectQuery string) error {
+	defer invalidateTableExistsCache(app, name)
+
 	return app.RunInTransaction(func(txApp App) error {
 		// delete old view (if exists)
 		if err := txApp.DeleteView(name); err != nil {

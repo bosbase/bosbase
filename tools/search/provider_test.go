@@ -12,11 +12,13 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"testing"
 	"time"
 
 	"dbx"
 	"github.com/bosbase/bosbase-enterprise/tools/list"
+	_ "github.com/jackc/pgx/v5/stdlib"
 )
 
 func TestNewProvider(t *testing.T) {
@@ -272,7 +274,7 @@ func TestProviderExecEmptyQuery(t *testing.T) {
 }
 
 func TestProviderExecNonEmptyQuery(t *testing.T) {
-	testDB, err := createTestDB()
+	testDB, err := createTestDBOrSkip(t)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -304,8 +306,8 @@ func TestProviderExecNonEmptyQuery(t *testing.T) {
 			false,
 			`{"items":[{"test1":1,"test2":"test2.1","test3":""},{"test1":2,"test2":"test2.2","test3":""}],"page":1,"perPage":10,"totalItems":2,"totalPages":1}`,
 			[]string{
-				"SELECT COUNT(DISTINCT [[test.id]]) FROM `test` WHERE NOT (`test1` IS NULL)",
-				"SELECT * FROM `test` WHERE NOT (`test1` IS NULL) ORDER BY `test1` ASC LIMIT 10",
+				"SELECT COUNT(DISTINCT [[test.id]]) FROM \"test\" WHERE NOT (\"test1\" IS NULL)",
+				"SELECT * FROM \"test\" WHERE NOT (\"test1\" IS NULL) ORDER BY \"test1\" ASC LIMIT 10",
 			},
 		},
 		{
@@ -318,8 +320,8 @@ func TestProviderExecNonEmptyQuery(t *testing.T) {
 			false,
 			`{"items":[],"page":10,"perPage":30,"totalItems":2,"totalPages":1}`,
 			[]string{
-				"SELECT COUNT(DISTINCT [[test.id]]) FROM `test` WHERE NOT (`test1` IS NULL)",
-				"SELECT * FROM `test` WHERE NOT (`test1` IS NULL) ORDER BY `test1` ASC LIMIT 30 OFFSET 270",
+				"SELECT COUNT(DISTINCT [[test.id]]) FROM \"test\" WHERE NOT (\"test1\" IS NULL)",
+				"SELECT * FROM \"test\" WHERE NOT (\"test1\" IS NULL) ORDER BY \"test1\" ASC LIMIT 30 OFFSET 270",
 			},
 		},
 		{
@@ -354,8 +356,8 @@ func TestProviderExecNonEmptyQuery(t *testing.T) {
 			false,
 			`{"items":[{"test1":2,"test2":"test2.2","test3":""}],"page":1,"perPage":` + fmt.Sprint(MaxPerPage) + `,"totalItems":1,"totalPages":1}`,
 			[]string{
-				"SELECT COUNT(DISTINCT [[test.id]]) FROM `test` WHERE ((NOT (`test1` IS NULL)) AND (((test2 IS NOT '' AND test2 IS NOT NULL)))) AND (test1 >= 2)",
-				"SELECT * FROM `test` WHERE ((NOT (`test1` IS NULL)) AND (((test2 IS NOT '' AND test2 IS NOT NULL)))) AND (test1 >= 2) ORDER BY `test1` ASC, `test2` DESC LIMIT " + fmt.Sprint(MaxPerPage),
+				"SELECT COUNT(DISTINCT [[test.id]]) FROM \"test\" WHERE ((NOT (\"test1\" IS NULL)) AND (((test2 != '' AND test2 IS NOT NULL)))) AND (test1 >= 2)",
+				"SELECT * FROM \"test\" WHERE ((NOT (\"test1\" IS NULL)) AND (((test2 != '' AND test2 IS NOT NULL)))) AND (test1 >= 2) ORDER BY \"test1\" ASC, \"test2\" DESC LIMIT " + fmt.Sprint(MaxPerPage),
 			},
 		},
 		{
@@ -368,7 +370,7 @@ func TestProviderExecNonEmptyQuery(t *testing.T) {
 			false,
 			`{"items":[{"test1":2,"test2":"test2.2","test3":""}],"page":1,"perPage":` + fmt.Sprint(MaxPerPage) + `,"totalItems":-1,"totalPages":-1}`,
 			[]string{
-				"SELECT * FROM `test` WHERE ((NOT (`test1` IS NULL)) AND (((test2 IS NOT '' AND test2 IS NOT NULL)))) AND (test1 >= 2) ORDER BY `test1` ASC, `test2` DESC LIMIT " + fmt.Sprint(MaxPerPage),
+				"SELECT * FROM \"test\" WHERE ((NOT (\"test1\" IS NULL)) AND (((test2 != '' AND test2 IS NOT NULL)))) AND (test1 >= 2) ORDER BY \"test1\" ASC, \"test2\" DESC LIMIT " + fmt.Sprint(MaxPerPage),
 			},
 		},
 		{
@@ -381,8 +383,8 @@ func TestProviderExecNonEmptyQuery(t *testing.T) {
 			false,
 			`{"items":[],"page":1,"perPage":10,"totalItems":0,"totalPages":0}`,
 			[]string{
-				"SELECT COUNT(DISTINCT [[test.id]]) FROM `test` WHERE (NOT (`test1` IS NULL)) AND (((test3 IS NOT '' AND test3 IS NOT NULL)))",
-				"SELECT * FROM `test` WHERE (NOT (`test1` IS NULL)) AND (((test3 IS NOT '' AND test3 IS NOT NULL))) ORDER BY `test1` ASC, `test3` ASC LIMIT 10",
+				"SELECT COUNT(DISTINCT [[test.id]]) FROM \"test\" WHERE (NOT (\"test1\" IS NULL)) AND (((test3 != '' AND test3 IS NOT NULL)))",
+				"SELECT * FROM \"test\" WHERE (NOT (\"test1\" IS NULL)) AND (((test3 != '' AND test3 IS NOT NULL))) ORDER BY \"test1\" ASC, \"test3\" ASC LIMIT 10",
 			},
 		},
 		{
@@ -395,7 +397,7 @@ func TestProviderExecNonEmptyQuery(t *testing.T) {
 			false,
 			`{"items":[],"page":1,"perPage":10,"totalItems":-1,"totalPages":-1}`,
 			[]string{
-				"SELECT * FROM `test` WHERE (NOT (`test1` IS NULL)) AND (((test3 IS NOT '' AND test3 IS NOT NULL))) ORDER BY `test1` ASC, `test3` ASC LIMIT 10",
+				"SELECT * FROM \"test\" WHERE (NOT (\"test1\" IS NULL)) AND (((test3 != '' AND test3 IS NOT NULL))) ORDER BY \"test1\" ASC, \"test3\" ASC LIMIT 10",
 			},
 		},
 		{
@@ -408,8 +410,8 @@ func TestProviderExecNonEmptyQuery(t *testing.T) {
 			false,
 			`{"items":[{"test1":2,"test2":"test2.2","test3":""}],"page":2,"perPage":1,"totalItems":2,"totalPages":2}`,
 			[]string{
-				"SELECT COUNT(DISTINCT [[test.id]]) FROM `test` WHERE NOT (`test1` IS NULL)",
-				"SELECT * FROM `test` WHERE NOT (`test1` IS NULL) ORDER BY `test1` ASC LIMIT 1 OFFSET 1",
+				"SELECT COUNT(DISTINCT [[test.id]]) FROM \"test\" WHERE NOT (\"test1\" IS NULL)",
+				"SELECT * FROM \"test\" WHERE NOT (\"test1\" IS NULL) ORDER BY \"test1\" ASC LIMIT 1 OFFSET 1",
 			},
 		},
 		{
@@ -422,7 +424,7 @@ func TestProviderExecNonEmptyQuery(t *testing.T) {
 			false,
 			`{"items":[{"test1":2,"test2":"test2.2","test3":""}],"page":2,"perPage":1,"totalItems":-1,"totalPages":-1}`,
 			[]string{
-				"SELECT * FROM `test` WHERE NOT (`test1` IS NULL) ORDER BY `test1` ASC LIMIT 1 OFFSET 1",
+				"SELECT * FROM \"test\" WHERE NOT (\"test1\" IS NULL) ORDER BY \"test1\" ASC LIMIT 1 OFFSET 1",
 			},
 		},
 	}
@@ -474,7 +476,7 @@ func TestProviderExecNonEmptyQuery(t *testing.T) {
 }
 
 func TestProviderFilterAndSortLimits(t *testing.T) {
-	testDB, err := createTestDB()
+	testDB, err := createTestDBOrSkip(t)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -602,14 +604,14 @@ func TestProviderFilterAndSortLimits(t *testing.T) {
 
 			hasErr := err != nil
 			if hasErr != s.expectError {
-				t.Fatalf("Expected hasErr %v, got %v", s.expectError, hasErr)
+				t.Fatalf("Expected hasErr %v, got %v (%v)", s.expectError, hasErr, err)
 			}
 		})
 	}
 }
 
 func TestProviderParseAndExec(t *testing.T) {
-	testDB, err := createTestDB()
+	testDB, err := createTestDBOrSkip(t)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -760,8 +762,23 @@ func (db *testDB) Close() error {
 }
 
 // NB! Don't forget to call `db.Close()` at the end of the test.
+// createTestDBOrSkip creates the test db or skips the test when no
+// PostgreSQL test database is configured (PB_TEST_POSTGRES_URL or SASSPB_POSTGRES_URL).
+func createTestDBOrSkip(t *testing.T) (*testDB, error) {
+	t.Helper()
+
+	if _, err := testPostgresDSN(); err != nil {
+		t.Skip(err.Error())
+	}
+
+	return createTestDB()
+}
+
+var testSchemaCounter atomic.Int64
+
 func createTestDB() (*testDB, error) {
-	conn, cleanup, err := openTestSchemaDB(fmt.Sprintf("search_%d", time.Now().UnixNano()))
+	// note: the counter avoids name collisions between parallel tests (low resolution clocks)
+	conn, cleanup, err := openTestSchemaDB(fmt.Sprintf("search_%d_%d", time.Now().UnixNano(), testSchemaCounter.Add(1)))
 	if err != nil {
 		return nil, err
 	}

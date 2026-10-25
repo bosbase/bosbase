@@ -5,12 +5,13 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"os"
 	"time"
 
 	"github.com/bosbase/bosbase-enterprise/tools/security"
 	"github.com/bosbase/bosbase-enterprise/tools/types"
 )
+
+var errSettingsUndecryptable = errors.New("settings decryption failed")
 
 const (
 	StoreKeySettingsVersion    = "pbAppSettingsVersion"
@@ -59,8 +60,24 @@ func (app *BaseApp) ReloadSettings() error {
 	return app.OnSettingsReload().Trigger(event, func(e *SettingsReloadEvent) error {
 		if base, ok := e.App.(*BaseApp); ok {
 			if err := base.settings.loadParam(base, param); err != nil {
-				return err
+				if !errors.Is(err, errSettingsUndecryptable) {
+					return err
+				}
+
+				// keep running with the default settings instead of failing
+				// (saving the settings is blocked to avoid overwriting the stored ones)
+				if !IsSettingsUnreadable(base) {
+					base.Store().Set(StoreKeySettingsUnreadable, true)
+					base.Logger().Error(
+						"The stored settings can't be decrypted, running with the default settings. "+
+							"Restore the original encryption key and restart (or set "+AllowSettingsResetEnv+"=true to overwrite them).",
+						"env", base.EncryptionEnv(),
+						"error", err.Error(),
+					)
+				}
+				return base.settings.PostScan()
 			}
+			base.Store().Remove(StoreKeySettingsUnreadable)
 
 			base.Store().Set(StoreKeySettingsVersion, param.Updated)
 			base.Store().Set(StoreKeySettingsLastCheck, time.Now())
@@ -92,17 +109,17 @@ func (s *Settings) loadParam(app App, param *Param) error {
 
 	// failed, try to decrypt
 	if plainDecodeErr != nil {
-		encryptionKey := os.Getenv(app.EncryptionEnv())
+		encryptionKey := EncryptionKey(app)
 
 		// load without decryption has failed and there is no encryption key to use for decrypt
 		if encryptionKey == "" {
-			return fmt.Errorf("invalid settings db data or missing encryption key %q", app.EncryptionEnv())
+			return fmt.Errorf("%w: invalid settings db data or missing/invalid encryption key %q", errSettingsUndecryptable, app.EncryptionEnv())
 		}
 
 		// decrypt
 		decrypted, decryptErr := security.Decrypt(string(param.Value), encryptionKey)
 		if decryptErr != nil {
-			return decryptErr
+			return fmt.Errorf("%w: %w", errSettingsUndecryptable, decryptErr)
 		}
 
 		// decode again

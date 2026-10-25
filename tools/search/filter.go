@@ -173,6 +173,8 @@ func buildResolversExpr(
 ) (dbx.Expression, error) {
 	var expr dbx.Expression
 
+	left, right = normalizeLiteralOperands(left, right)
+
 	switch op {
 	case fexpr.SignEq, fexpr.SignAnyEq:
 		expr = resolveEqualExpr(true, left, right)
@@ -247,6 +249,67 @@ func buildResolversExpr(
 	}
 
 	return expr, nil
+}
+
+// literalParamValue returns the value of a bare literal operand (eg. a number or text token
+// resolved to a single "{:placeholder}").
+func literalParamValue(r *ResolverResult) (any, bool) {
+	if r == nil || len(r.Params) != 1 || r.MultiMatchSubQuery != nil || r.NoCoalesce {
+		return nil, false
+	}
+	for name, v := range r.Params {
+		if r.Identifier == "{:"+name+"}" {
+			return v, true
+		}
+	}
+	return nil, false
+}
+
+func isNumberValue(v any) bool {
+	switch v.(type) {
+	case int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64, float32, float64:
+		return true
+	default:
+		return false
+	}
+}
+
+// normalizeLiteralOperands makes the comparisons between two literals (eg. "1=1", "1<2", "1='1'")
+// valid in PostgreSQL, which otherwise infers both parameters as text and can't encode the numbers:
+// two numbers are compared as numeric and a number vs a text as text.
+func normalizeLiteralOperands(left, right *ResolverResult) (*ResolverResult, *ResolverResult) {
+	lv, lok := literalParamValue(left)
+	rv, rok := literalParamValue(right)
+	if !lok || !rok {
+		return left, right
+	}
+
+	lNum, rNum := isNumberValue(lv), isNumberValue(rv)
+	switch {
+	case lNum && rNum:
+		return castLiteralOperand(left, "numeric"), castLiteralOperand(right, "numeric")
+	case lNum:
+		return literalOperandAsText(left), right
+	case rNum:
+		return left, literalOperandAsText(right)
+	default:
+		return left, right
+	}
+}
+
+func castLiteralOperand(r *ResolverResult, sqlType string) *ResolverResult {
+	clone := *r
+	clone.Identifier = "(" + r.Identifier + "::" + sqlType + ")"
+	return &clone
+}
+
+func literalOperandAsText(r *ResolverResult) *ResolverResult {
+	clone := *r
+	clone.Params = dbx.Params{}
+	for name, v := range r.Params {
+		clone.Params[name] = cast.ToString(v)
+	}
+	return &clone
 }
 
 var normalizedIdentifiers = map[string]string{
@@ -329,24 +392,25 @@ func resolveEqualExpr(equal bool, left, right *ResolverResult) dbx.Expression {
 	isLeftEmpty := isEmptyIdentifier(left) || (len(left.Params) == 1 && hasEmptyParamValue(left))
 	isRightEmpty := isEmptyIdentifier(right) || (len(right.Params) == 1 && hasEmptyParamValue(right))
 
+	// note: PostgreSQL doesn't support the SQLite "a IS b" null-safe comparison
+	// between values, so "IS [NOT] DISTINCT FROM" is used instead
 	equalOp := "="
-	nullEqualOp := "IS"
+	nullEqualOp := "IS NOT DISTINCT FROM"
 	concatOp := "OR"
 	nullExpr := "IS NULL"
 	if !equal {
 		equalOp = "!="
-		nullEqualOp = "IS NOT"
+		nullEqualOp = "IS DISTINCT FROM"
 		concatOp = "AND"
 		nullExpr = "IS NOT NULL"
 	}
 
 	// no coalesce (eg. compare to a json field)
-	// a IS b (when both are columns)
+	// a IS NOT DISTINCT FROM b (when both are columns)
 	// a != b (when one is a column and the other is a parameter value)
-	// a IS NOT b (when both are columns and not equal)
+	// a IS DISTINCT FROM b (when both are columns and not equal)
 	if left.NoCoalesce || right.NoCoalesce {
-		// If one side has parameters (is a value), use != instead of IS NOT
-		// IS NOT is only valid for NULL or column-to-column comparisons
+		// If one side has parameters (is a value), use = / != instead of the null-safe operators
 		hasLeftParams := len(left.Params) > 0
 		hasRightParams := len(right.Params) > 0
 		var op string
@@ -360,7 +424,7 @@ func resolveEqualExpr(equal bool, left, right *ResolverResult) dbx.Expression {
 			}
 		} else {
 			if hasLeftParams || hasRightParams {
-				// Comparing JSON field to a value - use != not IS NOT
+				// Comparing JSON field to a value
 				op = "!="
 			} else {
 				// Comparing two JSON fields (columns)

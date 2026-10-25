@@ -254,6 +254,24 @@ Array of created collection definitions.
 | `GET` | `/api/collections/{collection}/schema` | Superuser | Returns schema info for one collection. | Schema info object. |
 | `GET` | `/api/collections/schemas` | Superuser | Returns schema info for all collections. | Array/object of schema info. |
 
+### GET /api/collections/meta/scaffolds
+
+#### Function
+
+Superuser only. Returns the default `base`, `auth` and `view` collection scaffolds (default fields, indexes and options) keyed by collection type. Useful as a template before `POST /api/collections`.
+
+### GET /api/collections/{collection}/schema
+
+#### Function
+
+Superuser only. Returns a simplified schema of one collection (name, type and fields with their types and options), suitable for AI/code generation.
+
+### GET /api/collections/schemas
+
+#### Function
+
+Superuser only. Returns `{"collections": [...]}` with the simplified schema of every collection.
+
 ## Record CRUD
 
 Record request and response fields depend on the collection schema. All endpoints enforce collection rules unless the caller is a superuser.

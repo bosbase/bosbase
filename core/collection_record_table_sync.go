@@ -25,7 +25,9 @@ func (app *BaseApp) SyncRecordTableSchema(newCollection *Collection, oldCollecti
 	txErr := app.RunInTransaction(func(txApp App) error {
 		// create
 		// -----------------------------------------------------------
-		if oldCollection == nil || !app.HasTable(oldCollection.Name) {
+		// note: the cached app.HasTable is not used because it could be stale
+		// (eg. a negative result cached by the collection name validator right before the table creation)
+		if oldCollection == nil || !hasTableUncached(txApp.DB(), oldCollection.Name) {
 			tableName := newCollection.Name
 
 			fields := newCollection.Fields
@@ -140,6 +142,14 @@ func (app *BaseApp) SyncRecordTableSchema(newCollection *Collection, oldCollecti
 	if txErr != nil {
 		return txErr
 	}
+
+	// refresh the cached table existence checks
+	tableNames := []string{newCollection.Name}
+	if oldCollection != nil && !strings.EqualFold(oldCollection.Name, newCollection.Name) {
+		tableNames = append(tableNames, oldCollection.Name)
+	}
+	invalidateTableExistsCache(app, tableNames...)
+
 	return nil
 }
 

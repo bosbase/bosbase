@@ -26,9 +26,29 @@ func getTableExistsCache() *freecache.Cache {
 	return tableExistsCache
 }
 
-func tableExistsCacheKey(app *BaseApp, tableName string) []byte {
-	// Include app.DataDir() in case multiple app instances exist in the same process.
-	return []byte(strings.ToLower(tableName))
+const (
+	tableExistsCacheMainDB = "data"
+	tableExistsCacheAuxDB  = "aux"
+)
+
+func tableExistsCacheKey(app *BaseApp, dbName string, tableName string) []byte {
+	// Include app.DataDir() in case multiple app instances exist in the same process
+	// and the db name since the main and the auxiliary db have separate tables.
+	return []byte(app.DataDir() + "|" + dbName + "|" + strings.ToLower(tableName))
+}
+
+// invalidateTableExistsCache removes the cached HasTable results of the
+// provided main db tables (eg. after a table was created, renamed or dropped).
+func invalidateTableExistsCache(app App, tableNames ...string) {
+	baseApp, ok := app.(*BaseApp)
+	if !ok {
+		return
+	}
+
+	cache := getTableExistsCache()
+	for _, name := range tableNames {
+		cache.Del(tableExistsCacheKey(baseApp, tableExistsCacheMainDB, name))
+	}
 }
 
 // TableColumns returns all column names of a single table by its name.
@@ -142,7 +162,7 @@ func (app *BaseApp) DeleteTable(tableName string) error {
 	)).Execute()
 	if err == nil {
 		// Best-effort cache invalidation.
-		getTableExistsCache().Del(tableExistsCacheKey(app, tableName))
+		invalidateTableExistsCache(app, tableName)
 	}
 
 	return err
@@ -151,32 +171,23 @@ func (app *BaseApp) DeleteTable(tableName string) error {
 // HasTable checks if a table (or view) with the provided name exists (case insensitive).
 // in the data.db.
 func (app *BaseApp) HasTable(tableName string) bool {
-	return app.hasTable(app.ConcurrentDB(), tableName)
+	return app.hasTable(app.ConcurrentDB(), tableExistsCacheMainDB, tableName)
 }
 
 // AuxHasTable checks if a table (or view) with the provided name exists (case insensitive)
 // in the auixiliary.db.
 func (app *BaseApp) AuxHasTable(tableName string) bool {
-	return app.hasTable(app.AuxConcurrentDB(), tableName)
+	return app.hasTable(app.AuxConcurrentDB(), tableExistsCacheAuxDB, tableName)
 }
 
-func (app *BaseApp) hasTable(db dbx.Builder, tableName string) bool {
+func (app *BaseApp) hasTable(db dbx.Builder, dbName string, tableName string) bool {
 	cache := getTableExistsCache()
-	key := tableExistsCacheKey(app, tableName)
+	key := tableExistsCacheKey(app, dbName, tableName)
 	if cached, err := cache.Get(key); err == nil && len(cached) > 0 {
 		return cached[0] == 1
 	}
 
-	var exists int
-
-	err := db.Select("(1)").
-		From("information_schema.tables").
-		AndWhere(dbx.NewExp("table_schema = current_schema()")).
-		AndWhere(dbx.NewExp("LOWER(table_name)=LOWER({:tableName})", dbx.Params{"tableName": tableName})).
-		Limit(1).
-		Row(&exists)
-
-	found := err == nil && exists > 0
+	found := hasTableUncached(db, tableName)
 	if found {
 		// Positive results are stable (tables typically only get added).
 		_ = cache.Set(key, []byte{1}, 0)
@@ -187,6 +198,21 @@ func (app *BaseApp) hasTable(db dbx.Builder, tableName string) bool {
 	}
 
 	return found
+}
+
+// hasTableUncached checks the table existence directly in the db
+// (eg. when the check must see the uncommitted changes of a transaction).
+func hasTableUncached(db dbx.Builder, tableName string) bool {
+	var exists int
+
+	err := db.Select("(1)").
+		From("information_schema.tables").
+		AndWhere(dbx.NewExp("table_schema = current_schema()")).
+		AndWhere(dbx.NewExp("LOWER(table_name)=LOWER({:tableName})", dbx.Params{"tableName": tableName})).
+		Limit(1).
+		Row(&exists)
+
+	return err == nil && exists > 0
 }
 
 // Vacuum executes VACUUM on the data.db in order to reclaim unused data db disk space.

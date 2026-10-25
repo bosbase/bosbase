@@ -159,7 +159,8 @@ func NewWithConfig(config Config) *BosBase {
 			"BS_ENCRYPTION_KEY",
 			"BOSBASE_ENCRYPTION_KEY",
 		} {
-			if val := os.Getenv(candidate); len(val) >= 32 {
+			// note: invalid keys are reported and ignored by core.EncryptionKey (the data is stored unencrypted)
+			if val := os.Getenv(candidate); val != "" {
 				config.DefaultEncryptionEnv = candidate
 				break
 			}

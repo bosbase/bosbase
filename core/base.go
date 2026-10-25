@@ -1592,10 +1592,14 @@ func (app *BaseApp) initLogger() error {
 	ticker := time.NewTicker(duration)
 	done := make(chan bool)
 
+	errorFile := newErrorLogFileWriter(app.DataDir())
+
 	handler := logger.NewBatchHandler(logger.BatchOptions{
 		Level:     getLoggerMinLevel(app),
 		BatchSize: 200,
 		BeforeAddFunc: func(ctx context.Context, log *logger.Log) bool {
+			errorFile.write(log)
+
 			if app.IsDev() {
 				printLog(log)
 
@@ -1670,6 +1674,7 @@ func (app *BaseApp) initLogger() error {
 		Id: "__pbAppLoggerOnTerminate__",
 		Func: func(e *TerminateEvent) error {
 			handler.WriteAll(context.Background())
+			errorFile.close()
 
 			ticker.Stop()
 

@@ -580,7 +580,10 @@ func (m *Collection) unmarshalRawOptions() error {
 // For new/"blank" Collection models it replaces the model with a factory
 // instance and then unmarshal the provided data one on top of it.
 func (m *Collection) UnmarshalJSON(b []byte) error {
-	type alias *Collection
+	// note: a defined struct type (and not a named pointer type) is required
+	// because encoding/json/v2 resolves the methods of the pointer element
+	// and would otherwise call this method recursively
+	type alias Collection
 
 	// initialize the default fields
 	// (e.g. in case the collection was NOT created using the designated factories)
@@ -598,7 +601,7 @@ func (m *Collection) UnmarshalJSON(b []byte) error {
 		*m = *blank
 	}
 
-	return json.Unmarshal(b, alias(m))
+	return json.Unmarshal(b, (*alias)(m))
 }
 
 // MarshalJSON implements the [json.Marshaler] interface.

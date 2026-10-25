@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
-ARG GO_VERSION=1.24
-FROM golang:${GO_VERSION}-bullseye AS builder
+ARG GO_VERSION=1.27
+FROM golang:${GO_VERSION}-bookworm AS builder
 
 WORKDIR /src
 

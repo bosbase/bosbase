@@ -214,6 +214,8 @@ func Serve(app core.App, config ServeConfig) error {
 			return err
 		}
 
+		setMcpApiTarget(e.App, e.Router, handler)
+
 		e.Server.Handler = handler
 
 		if config.HttpsAddr == "" {
