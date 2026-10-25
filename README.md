@@ -11,13 +11,64 @@ Bosbase is built on the foundation of PocketBase — huge thanks to the PocketBa
 
 ## Features
 
-- **AI-driven development** — Integrate AI to automate operations, generate code, implement logic, and bring your creative ideas to life faster.
-- **Complete backend in one place** — Database (PostgreSQL + pgvector), Authentication, instant REST/GraphQL-like APIs, Realtime subscriptions, File Storage, Vector embeddings support, and WASM runtime for custom plugins.
-- **Hot-reload & zero-downtime updates** — Implement and modify complex business logic without restarting the service.
-- **PostgreSQL backend** — Scalable, production-ready with PostgreSQL support for enterprise-grade deployments and cost reduction.
-- **Extensible platform** — Designed for AI-driven automated operations and custom extensions.
-- **Remote MCP server for AI agents** — AI agents connect to `/api/mcp` with a BosBase token to keep long-term memories (pgvector), maintain an Obsidian-like knowledge vault with a link graph, recall their past actions, store files in S3/R2/GCS, relay LLM calls through stored channels, diagnose errors and call the whole HTTP API. See the [MCP guide](docs/mcp-guide.md) ([中文](docs/mcp-guide.zh-CN.md)) and the [MCP API reference](apidocs/api-reference/09-mcp.md).
-- **Permanently open source & free** — MIT licensed, completely free for personal use and large-scale enterprise deployments. Fully community-managed with no licensing fees.
+### Complete backend
+
+- **PostgreSQL first** — Production-ready PostgreSQL with pgvector for vectors; all system tables are created automatically by migrations on first start.
+- **Instant APIs** — Collections and records with a REST API (filtering, sorting, relation expansion, views), API rules for row-level access control, batch requests, GraphQL and raw SQL for superusers.
+- **Authentication** — Password, OAuth2 and OTP sign-in, email verification, password reset, email change, impersonation and custom token binding.
+- **Files** — File fields stored locally or on S3, with protected file access tokens.
+- **Realtime** — Server-Sent Events subscriptions filtered by the API rules, and WebSocket pub/sub.
+- **Operations** — Admin dashboard, settings, backups, request logs and cron jobs.
+
+### Extensibility and runtime
+
+- **Hot reload, zero downtime** — Create and change business logic scripts without restarting the service; run them synchronously, asynchronously or streamed over SSE/WebSocket, with per-script permissions.
+- **WASM plugins** — WASM runtime for custom plugins and high-performance logic.
+- **Cache and Redis** — Cache and Redis key APIs for fast shared state.
+
+### AI native
+
+- **Vectors and RAG** — Vector collections with semantic search, LLM documents, and LangChainGo helpers for completions, RAG, document querying and text-to-SQL.
+- **LLM relay** — Store several LLM channels and keys (OpenAI compatible or Anthropic) and call them through BosBase: any OpenAI SDK works with `/api/llm/v1` and a BosBase token, with streaming and usage tracking per channel and model.
+- **Embedding providers** — Superusers configure several embedding providers in the database with a default, priorities and automatic failover, applied without restart; existing memories can be re-embedded after switching models.
+
+### Remote MCP server for AI agents
+
+AI agents connect to `/api/mcp` (MCP Streamable HTTP) with a BosBase token and get a persistent brain:
+
+- **Long-term memory** — Memories organized in projects, stored in PostgreSQL + pgvector, with semantic and keyword search, typed relations, graph traversal and shortest paths.
+- **Context across conversations** — Pinned core memories, latest session summaries and open todos are given to the agent automatically when it connects; `memory_context` briefs it for the task, `memory_remember` saves what it learned with deduplication, and `memory_extract` lets the server extract memories from a transcript with an LLM.
+- **Conversation memory** — Conversation turns are saved and recalled by meaning, condensed into rolling summaries and consolidated into long-term project summaries.
+- **Obsidian-like knowledge vault** — Markdown notes with folders, frontmatter properties, tags, `[[wikilinks]]`, backlinks, renames that rewrite links, daily notes and version history.
+- **Knowledge graph** — Associative retrieval that spreads from the best matches along links, backlinks, relations, semantic neighbours and shared tags and explains each path; graph view with hubs, orphans and clusters; link suggestions.
+- **Private by default** — Each user's memories and notes are isolated; public knowledge bases are maintained by superusers.
+- **Shared memory spaces** — Teams share a memory library: joining requires the creator's approval and every memory records its author (MCP and HTTP API).
+- **Group chat between agents** — Agents chat in rooms (`chat_room`, `chat_send`, `chat_read` with long polling), and apps follow the same rooms through the realtime subscriptions.
+- **Agent accounts** — Superusers create user accounts over MCP or HTTP and get back the email, password and token to hand to each agent.
+- **Activity journal** — Every tool call is recorded so the agent remembers what it did in previous sessions.
+- **The whole HTTP API** — Agents discover, read the documentation of and call every endpoint with the caller's own permissions.
+
+```sh
+claude mcp add --transport http bosbase https://your-host/api/mcp --header "Authorization: Bearer <token>"
+```
+
+See the [MCP guide](docs/mcp-guide.md) and the [MCP API reference](apidocs/api-reference/09-mcp.md).
+
+### Object storage
+
+- **Multiple S3-compatible providers** — AWS S3, Cloudflare R2, Google Cloud Storage, MinIO, Backblaze B2 or any S3-compatible service, configured in the database; superusers set the shared default provider.
+- **Public links** — Uploads over HTTP or MCP return a link usable from the internet: permanent (CDN domain or public bucket) or presigned; large files upload directly to the storage with presigned URLs.
+- **Upload history** — Every object is recorded in PostgreSQL per user, and kept after deletion.
+
+### Security and diagnostics
+
+- **Secrets encrypted at rest** — Storage keys, LLM and embedding API keys are encrypted with the app encryption key and never returned; passwords, tokens and keys are redacted from the request logs.
+- **Safe upstreams** — Regular users' storage and LLM configurations can't reach private network addresses (SSRF protection).
+- **Diagnostics for AI** — Superusers (and their agents) get a health snapshot, grouped error logs from the database or the error log files written to disk, and Markdown error reports.
+
+### Open source
+
+- **Permanently open source and free** — MIT licensed, completely free for personal use and large-scale enterprise deployments, fully community-managed with no licensing fees.
 
 ## About Bosbase
 
