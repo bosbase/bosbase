@@ -137,7 +137,7 @@
             {/if}
         </h1>
     </div>
-    <!-- 🐱服务连接失败时弹出 -->
+    <!-- 🐱 shown when the connection to the server fails -->
     {#if isLoading}
         {$_("common.message.loadTimeout")}
         <div class="block txt-center">

@@ -17,7 +17,7 @@
     import active from "svelte-spa-router/active";
     import routes from "./routes";
 
-    // 初始化后端地址到Cookie以便支持用户自行切换
+    // store the backend URL in a cookie so users can switch it themselves
     import { getCookie, setCookie } from "@/utils/Cookie";
     let pbUrl = getCookie("pbUrl");
     if (!pbUrl) {

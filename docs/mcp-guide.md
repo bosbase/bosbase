@@ -1,6 +1,6 @@
 # BosBase MCP Guide
 
-> 中文版：[mcp-guide.zh-CN.md](./mcp-guide.zh-CN.md)
+> Chinese translation: [mcp-guide.zh-CN.md](./mcp-guide.zh-CN.md)
 
 BosBase ships a built-in remote MCP (Model Context Protocol) server. An AI client (Claude Code, Claude Desktop, Cursor, your own agent...) connects with a BosBase token and can:
 

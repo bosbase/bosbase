@@ -39,7 +39,7 @@
         {/if}
     {/if}
 {:else if CommonHelper.isEmpty(rawValue)}
-    <!-- 列表为空时字段的展示内容 -->
+    <!-- content displayed for an empty field value -->
     <span class="txt-hint"></span>
 {:else if field.type === "bool"}
     <span class="label" class:label-success={!!rawValue}>{rawValue ? "True" : "False"}</span>

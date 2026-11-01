@@ -6,7 +6,7 @@
 
     export let field;
     export let key = "";
-    // 🐱当前数值是在此处（前端）硬编码的，应该从后端获取
+    // 🐱 these values are currently hardcoded here (frontend) and should come from the backend
     let minLength = "0";
     let maxLength = "5000";
 </script>

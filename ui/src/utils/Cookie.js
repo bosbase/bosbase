@@ -11,7 +11,7 @@ export function setCookie(name, value) {
     document.cookie = name + "=" + value + ";" + expires + ";path=/";
 }
 
-// 🐱设置后端服务地址的初始化
+// 🐱 prompt to initialize/set the backend server URL
 export function setUrlPopup() {
     let dialogData = prompt("后端服务地址", getCookie("pbUrl"));
     if (dialogData !== null && dialogData.trim() !== "") {

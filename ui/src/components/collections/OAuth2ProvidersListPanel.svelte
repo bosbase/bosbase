@@ -6,7 +6,7 @@
     import providersList from "@/providers.js";
     import { createEventDispatcher } from "svelte";
 
-    // 🐱这里纯前端请求的话图片接口需要修正
+    // 🐱 for frontend-only requests the image endpoint URL needs to be fixed here
     import { getCookie } from "@/utils/Cookie";
     let pbUrl = getCookie("pbUrl") + "/_";
 

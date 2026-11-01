@@ -66,7 +66,7 @@
 
             await loadHealthData();
 
-            // 🐱在存入后端数据库后，额外设置页面的cookie
+            // 🐱 after saving to the backend database, also update the page cookie
             setCookie("pbUrl", formSettings.meta.appURL);
 
             setErrors({});

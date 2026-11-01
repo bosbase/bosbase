@@ -2349,7 +2349,7 @@ func ShellSafe(input string) (string, bool) {
 		}
 	}
 
-	// ========= 第2层：只允许极少数纯净业务命令 =========
+	// ========= Layer 2: only allow a very small set of plain business commands =========
 	tokens := strings.Fields(input)
 	if len(tokens) == 0 {
 		return "", false
@@ -2357,7 +2357,7 @@ func ShellSafe(input string) (string, bool) {
 
 	cmd := strings.ToLower(tokens[0])
 
-	// ========= 第3层：特殊命令深度限制 =========
+	// ========= Layer 3: extra restrictions for specific commands =========
 	switch cmd {
 	case "git":
 		allowedGit := map[string]bool{
@@ -2371,20 +2371,20 @@ func ShellSafe(input string) (string, bool) {
 			}
 		}
 	case "ls", "cat":
-		// 禁止任何绝对路径和 .. 路径穿越
+		// forbid absolute paths and ".." path traversal
 		for _, t := range tokens[1:] {
 			if strings.HasPrefix(t, "/") || strings.Contains(t, "..") || strings.Contains(t, "~") {
 				return orig, false
 			}
 		}
 	case "echo":
-		// echo 允许，但禁止重定向写文件
+		// echo is allowed but redirecting into files is forbidden
 		if strings.Contains(lower, ">") || strings.Contains(lower, ">>") || strings.Contains(lower, "|") {
 			return orig, false
 		}
 	}
 
-	// ========= 第5层：长度与字符集终极限制 =========
+	// ========= Layer 5: final length and charset limits =========
 	if len(input) > 200 {
 		return orig, false
 	}
@@ -2392,7 +2392,7 @@ func ShellSafe(input string) (string, bool) {
 	return input, true
 }
 
-// 下面的函数保持不变（和之前一样）
+// The functions below are unchanged from the previous version.
 func isSafeOption(s string) bool {
 	if len(s) < 2 {
 		return false

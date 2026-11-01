@@ -293,22 +293,22 @@ button {
         min-height: var(--xsBtnHeight);
     }
 
-    // 登录页设置按钮
+    // settings button of the login page
     &.btn-login-setting {
         width: 50px;
     }
 
-    // 登录按钮
+    // login button
     &.btn-login {
         flex: 1;
     }
 
-    // 铺满宽度按钮
+    // full width button
     &.btn-block {
         display: flex;
         width: 100%;
     }
-    // 后端连接界面的按钮、图标大小
+    // button and icon size of the backend connection screen
     &.btn-setting-loading {
         position: fixed;
         height: 32px;

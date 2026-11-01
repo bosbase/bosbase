@@ -416,7 +416,7 @@
         if (!collection?.id || !original?.email) {
             return;
         }
-        // 🐱复杂传参
+        // 🐱 translation with parameters
         confirm($_("common.popup.accountSetting.content.2", { values: { email: original.email } }), () => {
             return ApiClient.collection(collection.id)
                 .requestVerification(original.email)
@@ -434,7 +434,7 @@
         if (!collection?.id || !original?.email) {
             return;
         }
-        // 🐱复杂动态传参示例
+        // 🐱 example of a translation with dynamic parameters
         confirm($_("common.popup.accountSetting.content.3", { values: { email: original.email } }), () => {
             return ApiClient.collection(collection.id)
                 .requestPasswordReset(original.email)

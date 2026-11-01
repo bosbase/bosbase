@@ -27,7 +27,7 @@ This folder contains the BosBase backend API documentation organized by interfac
 - [Memory Spaces (shared memories)](./11-memory-spaces.md)
 - [Group Chat and Agent Accounts](./12-chat-accounts.md)
 
-MCP user guide: [docs/mcp-guide.md](../../docs/mcp-guide.md) ([中文](../../docs/mcp-guide.zh-CN.md))
+MCP user guide: [docs/mcp-guide.md](../../docs/mcp-guide.md) ([Chinese translation](../../docs/mcp-guide.zh-CN.md))
 
 ## Route Coverage
 

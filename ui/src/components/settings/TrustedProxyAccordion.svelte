@@ -1,4 +1,4 @@
-<!-- 代理IP相关 -->
+<!-- trusted proxy / client IP settings -->
 <script>
     import { _ } from "svelte-i18n";
     import tooltip from "@/actions/tooltip";
