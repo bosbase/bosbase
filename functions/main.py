@@ -502,8 +502,13 @@ class ScriptExecutor:
                     'load_time': time.time()
                 }
                 
-                # Execute module code
-                spec.loader.exec_module(module)
+                # Execute module code compiled straight from the source file.
+                # spec.loader.exec_module() would reuse __pycache__ bytecode, which is
+                # validated only by the source size and its mtime in whole seconds, so
+                # a same-length edit within the same second would run stale code.
+                with open(script_path, 'rb') as f:
+                    source = f.read()
+                exec(compile(source, script_path, 'exec'), module.__dict__)
                 
                 # Discover functions in the module
                 functions = {}
@@ -680,13 +685,16 @@ class ScriptExecutor:
         try:
             # Get script information
             script_info = self.get_script(script_path, script_name)
-            
-            # If script not found but script_path is provided, try to load it
-            if not script_info and script_path:
+
+            # When a script path is provided, (re)load it if it is not cached yet or
+            # the file changed on disk. _load_script is a no-op for an unchanged file,
+            # so updates are picked up even when the directory watcher missed them.
+            if script_path:
                 # Normalize the path to absolute
                 abs_script_path = os.path.abspath(script_path)
                 if os.path.exists(abs_script_path):
-                    logger.info(f"Script not in cache, attempting to load: {abs_script_path}")
+                    if not script_info:
+                        logger.info(f"Script not in cache, attempting to load: {abs_script_path}")
                     if self._load_script(abs_script_path):
                         script_info = self.get_script(abs_script_path, script_name)
             
@@ -784,9 +792,10 @@ async def lifespan(app: FastAPI):
     _executor = ScriptExecutor()
     
     # Add default watch directories
+    # (add_watch_directory creates missing directories, so a fresh deployment
+    # where the scripts directory does not exist yet is still watched)
     for watch_dir in Config.WATCH_DIRS:
-        if os.path.exists(watch_dir) or os.path.isdir(watch_dir):
-            _executor.add_watch_directory(watch_dir, Config.WATCH_RECURSIVE)
+        _executor.add_watch_directory(watch_dir, Config.WATCH_RECURSIVE)
     
     # Start monitoring
     _executor.start_watching()

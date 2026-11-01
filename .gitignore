@@ -1,0 +1,2 @@
+# WasmEdge native libraries copied into the Docker image (download separately)
+wasmedge/
